@@ -1,33 +1,40 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom"
-
-
+import { useCallback, useRef, useState } from "react";
 
 export const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const navigate = useNavigate();
+    const inputPasswordRef = useRef<HTMLInputElement>(null);
 
 
-    const handleEntrar = () => {
+    // useEffect(() => {
+    //     console.log(email, password);
+    // }, [email, password]);
+
+    const handleEntrar = useCallback(() => {
         console.log(email, password);
-    }
+
+        if(inputPasswordRef.current !== null){
+            inputPasswordRef.current.focus();
+        }
+    }, [email, password])
 
     return (
         <div>
             <form>
+                <p>Quantidade de caracteres no e-mail: {email.length}</p>
                 <div>
                     <label>
                         <span>Email</span>
-                        <input value={email} onChange={e => setEmail(e.target.value)} type="text" />
+                        <input value={email} onChange={e => setEmail(e.target.value)} type="text"
+                        onKeyDown={e => e.key === 'Enter' ? inputPasswordRef.current?.focus() : undefined} />
                     </label>
                 </div>
                 <div>
                     <label>
                         <span>Senha</span>
-                        <input value={password} onChange={e => setPassword(e.target.value)} type="password" />
+                        <input ref={inputPasswordRef} value={password} onChange={e => setPassword(e.target.value)} type="password" />
                     </label>
                 </div>
 

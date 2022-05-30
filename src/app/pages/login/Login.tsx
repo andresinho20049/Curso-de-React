@@ -1,4 +1,7 @@
 import { useCallback, useRef, useState } from "react";
+import { useUsuarioLogged } from "../../shared/hooks";
+import { ButtonLogin } from "./components/ButtonLogin";
+import { InputLogin } from "./components/inputLogin";
 
 export const Login = () => {
 
@@ -6,6 +9,8 @@ export const Login = () => {
     const [password, setPassword] = useState('');
 
     const inputPasswordRef = useRef<HTMLInputElement>(null);
+
+    const { nomeUsuario } = useUsuarioLogged();
 
 
     // useEffect(() => {
@@ -23,24 +28,31 @@ export const Login = () => {
     return (
         <div>
             <form>
-                <p>Quantidade de caracteres no e-mail: {email.length}</p>
-                <div>
-                    <label>
-                        <span>Email</span>
-                        <input value={email} onChange={e => setEmail(e.target.value)} type="text"
-                        onKeyDown={e => e.key === 'Enter' ? inputPasswordRef.current?.focus() : undefined} />
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <span>Senha</span>
-                        <input ref={inputPasswordRef} value={password} onChange={e => setPassword(e.target.value)} type="password" />
-                    </label>
-                </div>
 
-                <button type="button" onClick={handleEntrar}>
+                <p>Quantidade de caracteres no e-mail: {email.length}</p>
+
+                <p>{nomeUsuario}</p>
+
+                <InputLogin 
+                    value={email} 
+                    label="Email" 
+                    onChange={setEmail} 
+                    onPressEnter={() => inputPasswordRef.current?.focus()} 
+                />
+
+                <InputLogin 
+                    value={password} 
+                    label="Password" 
+                    onChange={setPassword} 
+                    type='password' 
+                    ref={inputPasswordRef} 
+                />
+                
+                {/* <button type="button" onClick={handleEntrar}>
                     Entrar
-                </button>
+                </button> */}
+
+                <ButtonLogin type="button" onClick={handleEntrar} label="Entrar" />
             </form>
         </div>
     )

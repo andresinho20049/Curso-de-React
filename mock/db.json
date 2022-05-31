@@ -1,13 +1,8 @@
 {
   "tarefas": [
     {
-      "id": 1,
-      "title": "Tarefa 01",
-      "isCompleted": false
-    },
-    {
       "title": "Tarefa nova",
-      "isCompleted": false,
+      "isCompleted": true,
       "id": 2
     }
   ]

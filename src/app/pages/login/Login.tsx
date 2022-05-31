@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from "react";
+import { Navigate } from "react-router-dom";
 import { useUsuarioLogged } from "../../shared/hooks";
 import { ButtonLogin } from "./components/ButtonLogin";
 import { InputLogin } from "./components/inputLogin";
@@ -22,7 +23,10 @@ export const Login = () => {
 
         if(inputPasswordRef.current !== null){
             inputPasswordRef.current.focus();
+            return;
         }
+
+        Navigate({to: '/'});
     }, [email, password])
 
     return (

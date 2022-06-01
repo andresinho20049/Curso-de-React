@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { useContextUsuarioLogged } from "../../shared/hooks";
 
 export const Dashboard = () => {
@@ -8,10 +9,7 @@ export const Dashboard = () => {
         <div>
             <p>Dashboard</p>
 
-
-            <button type="button" onClick={() => setToken(null)}>
-                Sair
-            </button>
+            <Button variant="contained" color="primary" type="button" onClick={() => setToken(null)}>Sair</Button>
         </div>
     )
 }

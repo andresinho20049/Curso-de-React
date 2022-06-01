@@ -1,33 +1,24 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, ReactNode } from "react";
+import useStorage from "../services/storage/useStorage";
 
-interface IUsuarioLoggedConxtextData {
-    nomeUsuario: string
-    logout: () => void
+interface IUsuarioLoggedData {
+    token: string | null
+    setToken: (newToken: string | null) => void
 }
+
+export const UsuarioLoggedContext = createContext({} as IUsuarioLoggedData);
+
 
 interface IUsuarioLoggedProviderProps {
-    children: React.ReactNode
+    children: ReactNode
 }
 
-export const UsuarioLoggedContext = createContext<IUsuarioLoggedConxtextData>({} as IUsuarioLoggedConxtextData);
-
-export const UsuarioLoggedProvider : React.FC<IUsuarioLoggedProviderProps> = ({children}) => {
-
-    const [nome, setNome] = useState('');
-
-    useEffect(() => {
-        setTimeout(() => [
-            setNome('André')
-        ], 1000);
-    })
-
-    const handleLogout = useCallback(() => {
-        console.log('Logout Executou');
-    }, [])
+export const UsuarioLoggedProvider = ({ children} : IUsuarioLoggedProviderProps) => {
+    const [token, setToken] = useStorage(null);
 
     return (
-        <UsuarioLoggedContext.Provider value={{nomeUsuario: nome, logout: handleLogout}}>
+        <UsuarioLoggedContext.Provider value={{token, setToken}}>
             {children}
         </UsuarioLoggedContext.Provider>
-    );
+    )
 }

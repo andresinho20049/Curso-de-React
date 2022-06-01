@@ -1,6 +1,9 @@
 import { useCallback, useRef, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useUsuarioLogged } from "../../shared/hooks";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useContextUsuarioLogged } from "../../shared/hooks";
+import { ApiException } from "../../shared/services/api/ApiException";
+import { UsuarioService } from "../../shared/services/api/usuario/UsuarioService";
 import { ButtonLogin } from "./components/ButtonLogin";
 import { InputLogin } from "./components/inputLogin";
 
@@ -11,50 +14,49 @@ export const Login = () => {
 
     const inputPasswordRef = useRef<HTMLInputElement>(null);
 
-    const { nomeUsuario } = useUsuarioLogged();
+    const {setToken} = useContextUsuarioLogged();
+    const navigate = useNavigate();
 
-
-    // useEffect(() => {
-    //     console.log(email, password);
-    // }, [email, password]);
+    const bcrypt = require('bcryptjs');
 
     const handleEntrar = useCallback(() => {
         console.log(email, password);
 
-        if(inputPasswordRef.current !== null){
-            inputPasswordRef.current.focus();
-            return;
-        }
+        UsuarioService.getByUsername(email).then((result) => {
+            if (result instanceof ApiException) {
+                alert(result.message);
+            } else {
+                const r = result[0];
 
-        Navigate({to: '/'});
+                //Check Password
+                if (bcrypt.compareSync(password, r.password)) {
+
+                    setToken(r.password);
+                    return navigate('/dashboard');
+                }
+
+            }
+        });
+
     }, [email, password])
 
     return (
         <div>
             <form>
-
-                <p>Quantidade de caracteres no e-mail: {email.length}</p>
-
-                <p>{nomeUsuario}</p>
-
-                <InputLogin 
-                    value={email} 
-                    label="Email" 
-                    onChange={setEmail} 
-                    onPressEnter={() => inputPasswordRef.current?.focus()} 
+                <InputLogin
+                    value={email}
+                    label="Email"
+                    onChange={setEmail}
+                    onPressEnter={() => inputPasswordRef.current?.focus()}
                 />
 
-                <InputLogin 
-                    value={password} 
-                    label="Password" 
-                    onChange={setPassword} 
-                    type='password' 
-                    ref={inputPasswordRef} 
+                <InputLogin
+                    value={password}
+                    label="Password"
+                    onChange={setPassword}
+                    type='password'
+                    ref={inputPasswordRef}
                 />
-                
-                {/* <button type="button" onClick={handleEntrar}>
-                    Entrar
-                </button> */}
 
                 <ButtonLogin type="button" onClick={handleEntrar} label="Entrar" />
             </form>

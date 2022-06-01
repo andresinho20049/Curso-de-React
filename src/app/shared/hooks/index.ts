@@ -1,1 +1,1 @@
-export * from './UseUsuarioLogged'
+export * from './useContextUsuarioLogged'

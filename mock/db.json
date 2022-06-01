@@ -1,9 +1,16 @@
 {
   "tarefas": [
     {
+      "id": 2,
       "title": "Tarefa nova",
-      "isCompleted": true,
-      "id": 2
+      "isCompleted": true
+    }
+  ],
+  "usuarios": [
+    {
+      "username": "andre@email.com",
+      "password": "$2a$10$MYvxnxHo/a8lA0K/8abcNO.ISL16FxriiBAG/G6vFpfzRLr29S/CW",
+      "id": 1
     }
   ]
 }

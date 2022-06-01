@@ -1,14 +1,13 @@
 import { UsuarioLoggedProvider } from "./shared/context";
 import { Rota } from "./routes"
-import { ThemeProvider } from "@mui/material";
-import { LightTheme } from "./shared/themes";
+import { AppThemeProvider } from "./shared/context/ThemeContext";
 
 export const App = () => {
   return (
-    <ThemeProvider theme={LightTheme}>
+    <AppThemeProvider>
       <UsuarioLoggedProvider>
         <Rota />
       </UsuarioLoggedProvider>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }

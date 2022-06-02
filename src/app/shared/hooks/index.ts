@@ -1,1 +1,1 @@
-export * from './useContextUsuarioLogged'
+export {}

@@ -1,4 +1,4 @@
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import useStorage from "../services/storage/useStorage";
 
 interface IUsuarioLoggedData {
@@ -8,6 +8,9 @@ interface IUsuarioLoggedData {
 
 export const UsuarioLoggedContext = createContext({} as IUsuarioLoggedData);
 
+export const useContextUsuarioLogged = () => {
+    return useContext(UsuarioLoggedContext);
+}
 
 interface IUsuarioLoggedProviderProps {
     children: ReactNode

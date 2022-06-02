@@ -1,3 +1,4 @@
+import { Button, Input } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { ApiException } from "../../shared/services/api/ApiException";
 import { ITarefa, TarefasService } from "../../shared/services/api/tarefas/TarefasService";
@@ -86,11 +87,12 @@ export const Lista = () => {
     }, []);
 
     return (
-        <>
+        <div style={{padding: '20px'}}>
             <p>Lista</p>
 
-            <input
+            <Input
                 type="text"
+                placeholder="Digite um valor"
                 onKeyDown={handleInputKeyDown}
             />
 
@@ -106,11 +108,11 @@ export const Lista = () => {
                                 onChange={() => handleChangeSelected(item)}
                             />
                             {item.title}
-                            <button onClick={() => handleDelete(item.id ?? 0)}>Apagar</button>
+                            <Button variant="text" onClick={() => handleDelete(item.id ?? 0)}>Apagar</Button>
                         </li>
                     );
                 })}
             </ul>
-        </>
+        </div>
     );
 }

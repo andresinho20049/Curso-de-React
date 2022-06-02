@@ -1,17 +1,11 @@
-import { AppDrawerProvider, UsuarioLoggedProvider } from "./shared/context";
-import { Rota } from "./routes"
-import { AppThemeProvider } from "./shared/context/ThemeContext";
-import { MenuLateral } from "./shared/components";
+import { UsuarioLoggedProvider, AppThemeProvider } from "./shared/context";
+import { Rotas } from "./routes";
 
 export const App = () => {
   return (
     <AppThemeProvider>
       <UsuarioLoggedProvider>
-        <AppDrawerProvider>
-          <MenuLateral>
-            <Rota />
-          </MenuLateral>
-        </AppDrawerProvider>
+        <Rotas />
       </UsuarioLoggedProvider>
     </AppThemeProvider>
   );

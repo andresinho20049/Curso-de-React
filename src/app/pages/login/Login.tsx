@@ -1,9 +1,8 @@
 import { Button, Input } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContextUsuarioLogged } from "../../shared/hooks";
-import { ApiException } from "../../shared/services/api/ApiException";
-import { UsuarioService } from "../../shared/services/api/usuario/UsuarioService";
+import { useContextUsuarioLogged } from "../../shared/context";
+import { ApiException, UsuarioService } from "../../shared/services";
 
 export const Login = () => {
 

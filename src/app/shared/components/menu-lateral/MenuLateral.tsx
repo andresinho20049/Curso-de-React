@@ -41,7 +41,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
 
                 </Box>
             </Drawer>
-            <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)}>
+            <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)} bgcolor={theme.palette.background.default}>
                 {children}
             </Box>
         </>

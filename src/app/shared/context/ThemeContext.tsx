@@ -32,7 +32,7 @@ export const AppThemeProvider = ({ children }: IThemeProviderProps) => {
 
     return (
         <AppThemeContext.Provider value={{ themeName, toggleTheme }}>
-            <ThemeProvider theme={LightTheme}>
+            <ThemeProvider theme={theme}>
                 <Box width='100vw' height='100vh' bgcolor={theme.palette.background.default}>
                     {children}
                 </Box>

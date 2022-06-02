@@ -1,11 +1,9 @@
+import { Button, Input } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useContextUsuarioLogged } from "../../shared/hooks";
 import { ApiException } from "../../shared/services/api/ApiException";
 import { UsuarioService } from "../../shared/services/api/usuario/UsuarioService";
-import { ButtonLogin } from "./components/ButtonLogin";
-import { InputLogin } from "./components/inputLogin";
 
 export const Login = () => {
 
@@ -14,7 +12,7 @@ export const Login = () => {
 
     const inputPasswordRef = useRef<HTMLInputElement>(null);
 
-    const {setToken} = useContextUsuarioLogged();
+    const { setToken } = useContextUsuarioLogged();
     const navigate = useNavigate();
 
     const bcrypt = require('bcryptjs');
@@ -43,22 +41,22 @@ export const Login = () => {
     return (
         <div>
             <form>
-                <InputLogin
+                <Input
                     value={email}
-                    label="Email"
-                    onChange={setEmail}
-                    onPressEnter={() => inputPasswordRef.current?.focus()}
+                    placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    onClick={() => inputPasswordRef.current?.focus()}
                 />
 
-                <InputLogin
+                <Input
                     value={password}
-                    label="Password"
-                    onChange={setPassword}
+                    placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                     type='password'
                     ref={inputPasswordRef}
                 />
 
-                <ButtonLogin type="button" onClick={handleEntrar} label="Entrar" />
+                <Button type="button" onClick={() => handleEntrar()}>Entrar</Button>
             </form>
         </div>
     )

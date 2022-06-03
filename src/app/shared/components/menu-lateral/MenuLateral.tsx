@@ -1,7 +1,8 @@
-import { Avatar, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from "@mui/material"
+import { Avatar, Divider, Drawer, List, useMediaQuery, useTheme } from "@mui/material"
 import { Box } from "@mui/system";
 import { ReactNode } from "react";
 import { useAppDrawerContext } from "../../context";
+import { ButtonItemDrawerApp } from "./ButtonItemDrawerApp";
 
 interface IMenuLateralProps {
     children: ReactNode
@@ -11,7 +12,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const { drawerOpen, toggleDrawer } = useAppDrawerContext();
+    const { drawerOpen, toggleDrawer, drawerOptions } = useAppDrawerContext();
 
     return (
         <>
@@ -27,14 +28,11 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
 
                     <Box flex={1}>
                         <List component='nav'>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <Icon>home</Icon>
-                                </ListItemIcon>
-                                <ListItemText>
-                                    Pagina inicial
-                                </ListItemText>
-                            </ListItemButton>
+                            {drawerOptions.map(dp => (
+                                <ButtonItemDrawerApp key={dp.path} to={dp.path} icone={dp.icon}>
+                                    {dp.label}
+                                </ButtonItemDrawerApp>
+                            ))}
                         </List>
 
                     </Box>

@@ -1,8 +1,8 @@
 import { Avatar, Divider, Drawer, List, useMediaQuery, useTheme } from "@mui/material"
 import { Box } from "@mui/system";
 import { ReactNode } from "react";
-import { useAppDrawerContext } from "../../context";
-import { ButtonItemDrawerApp } from "./ButtonItemDrawerApp";
+import { useAppDrawerContext, useAppThemeContext } from "../../context";
+import { ButtonItemDrawerApp, ToggleButtonDrawer } from "./ButtonItemDrawerApp";
 
 interface IMenuLateralProps {
     children: ReactNode
@@ -12,6 +12,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
     const theme = useTheme();
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
+    const { toggleTheme } = useAppThemeContext();
     const { drawerOpen, toggleDrawer, drawerOptions } = useAppDrawerContext();
 
     return (
@@ -21,7 +22,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
                     <Box width='100%' height={theme.spacing(20)} display='flex' justifyContent='center' alignItems='center'>
                         <Avatar
                             sx={{ height: theme.spacing(12), width: theme.spacing(12) }}
-                            src="https://www.pngplay.com/wp-content/uploads/12/Joker-2019-Background-PNG-Clip-Art-Image.png" />
+                            src="https://www.pngmart.com/files/11/Internet-Hacker-PNG-Clipart.png" />
                     </Box>
 
                     <Divider />
@@ -35,6 +36,9 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
                             ))}
                         </List>
 
+                    </Box>
+                    <Box>
+                        <ToggleButtonDrawer onClick={toggleTheme} />
                     </Box>
 
                 </Box>

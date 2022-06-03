@@ -10,17 +10,17 @@ interface IButtonItemDrawerAppProps {
     children: ReactNode
 }
 
-export const ButtonItemDrawerApp = ({to, icone, onClick, children} :IButtonItemDrawerAppProps) => {
+export const ButtonItemDrawerApp = ({ to, icone, onClick, children }: IButtonItemDrawerAppProps) => {
     const navigate = useNavigate();
 
     const resolverdPath = useResolvedPath(to);
-    const match = useMatch({ path: resolverdPath.pathname, end: false});
-    
+    const match = useMatch({ path: resolverdPath.pathname, end: false });
+
     const handleClick = () => {
         navigate(to)
         onClick?.();
     }
-    
+
     return (
         <ListItemButton onClick={handleClick} selected={!!match}>
             <ListItemIcon>
@@ -28,6 +28,23 @@ export const ButtonItemDrawerApp = ({to, icone, onClick, children} :IButtonItemD
             </ListItemIcon>
             <ListItemText>
                 {children}
+            </ListItemText>
+        </ListItemButton>
+    )
+}
+
+interface IToggleButtonDrawerProps {
+    onClick: () => void
+}
+
+export const ToggleButtonDrawer = ({ onClick }: IToggleButtonDrawerProps) => {
+    return (
+        <ListItemButton onClick={onClick}>
+            <ListItemIcon>
+                <Icon>dark_mode</Icon>
+            </ListItemIcon>
+            <ListItemText>
+                Alternar Tema
             </ListItemText>
         </ListItemButton>
     )

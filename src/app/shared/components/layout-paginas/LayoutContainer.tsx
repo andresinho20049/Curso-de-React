@@ -24,7 +24,15 @@ export const TitleContainer = styled('div')`
 `
 
 export const BarraFerramentasContainer = styled('div')`
-    
+    display: flex;
+    gap: ${({theme}) => theme.spacing(1)};
+    align-items: center;
+    margin: ${({theme}) => theme.spacing(0)} ${({theme}) => theme.spacing(1)};
+    padding: ${({ theme }) => theme.spacing(1)} ${({ theme }) => theme.spacing(2)};
+    box-shadow: ${({theme}) => theme.shadows[4]};
+    border-radius: ${({theme}) => theme.spacing(1)};
+    background-color: ${({ theme }) => theme.palette.background.paper};
+    height: ${({theme}) => theme.spacing(5)};
 `
 
 export const ContentContainer = styled('div')`

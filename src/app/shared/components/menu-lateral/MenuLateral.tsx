@@ -1,5 +1,4 @@
-import { Avatar, Divider, Drawer, List, useMediaQuery, useTheme } from "@mui/material"
-import { Box } from "@mui/system";
+import { Avatar, Box, Divider, Drawer, List, useMediaQuery, useTheme } from "@mui/material"
 import { ReactNode } from "react";
 import { useAppDrawerContext, useAppThemeContext } from "../../context";
 import { ButtonItemDrawerApp, ToggleButtonDrawer } from "./ButtonItemDrawerApp";

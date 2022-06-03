@@ -1,5 +1,6 @@
 import { Button, Input } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
+import { LayoutBasePaginas } from "../../shared/layout";
 import { ApiException } from "../../shared/services/api/ApiException";
 import { ITarefa, TarefasService } from "../../shared/services/api/tarefas/TarefasService";
 
@@ -87,7 +88,7 @@ export const Lista = () => {
     }, []);
 
     return (
-        <div style={{padding: '20px'}}>
+        <LayoutBasePaginas titulo="Lista">
             <p>Lista</p>
 
             <Input
@@ -113,6 +114,6 @@ export const Lista = () => {
                     );
                 })}
             </ul>
-        </div>
+        </LayoutBasePaginas>
     );
 }

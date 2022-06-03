@@ -29,7 +29,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
                     <Box flex={1}>
                         <List component='nav'>
                             {drawerOptions.map(dp => (
-                                <ButtonItemDrawerApp key={dp.path} to={dp.path} icone={dp.icon}>
+                                <ButtonItemDrawerApp key={dp.path} to={dp.path} icone={dp.icon} onClick={smDown ? toggleDrawer : undefined}>
                                     {dp.label}
                                 </ButtonItemDrawerApp>
                             ))}

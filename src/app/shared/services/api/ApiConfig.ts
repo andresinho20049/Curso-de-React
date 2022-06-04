@@ -1,7 +1,14 @@
 import axios from 'axios'
+import { errorInterceptor, responseInterceptor } from './interceptors';
 
-export const API = () => {
-    return axios.create({
-        baseURL: 'http://localhost:4000'
-    });
-}
+const Api = axios.create({
+    baseURL: 'http://localhost:4000'
+});
+
+
+Api.interceptors.response.use(
+    (res) => responseInterceptor(res),
+    (error) => errorInterceptor(error)
+)
+
+export { Api };

@@ -1,4 +1,4 @@
-import { API } from "../ApiConfig";
+import { Api } from "../ApiConfig";
 import { ApiException } from "../ApiException";
 
 export interface IUsuarioLogin {
@@ -18,7 +18,7 @@ const encryptPassword = (password: string) => {
 const getAll = async (): Promise<IUsuarioLogin[] | ApiException> => {
 
     try {
-        const { data } = await API().get('/usuarios');
+        const { data } = await Api.get('/usuarios');
 
         return data;
     } catch (error: any) {
@@ -29,7 +29,7 @@ const getAll = async (): Promise<IUsuarioLogin[] | ApiException> => {
 const getById = async (id: number): Promise<IUsuarioLogin | ApiException> => {
 
     try {
-        const { data } = await API().get(`/usuarios/${id}`);
+        const { data } = await Api.get(`/usuarios/${id}`);
 
         return data;
     } catch (error: any) {
@@ -41,7 +41,7 @@ const getByUsername = async (username: string): Promise<IUsuarioLogin[] | ApiExc
 
     try {
 
-        const { data } = await API().get(`/usuarios?username=${username}`);
+        const { data } = await Api.get(`/usuarios?username=${username}`);
 
         return data;
     } catch (error: any) {
@@ -57,7 +57,7 @@ const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | ApiE
         console.log(dataToCreate)
         console.log(password);
 
-        const { data } = await API().post<IUsuarioLogin>(`/usuarios`, dataToCreate);
+        const { data } = await Api.post<IUsuarioLogin>(`/usuarios`, dataToCreate);
 
         return data;
     } catch (error: any) {
@@ -70,7 +70,7 @@ const update = async (id: number, dataToUpdate: IUsuarioLogin): Promise<IUsuario
     try {
         dataToUpdate.password = encryptPassword(dataToUpdate.password);
 
-        const { data } = await API().put<IUsuarioLogin>(`/usuarios/${id}`, dataToUpdate);
+        const { data } = await Api.put<IUsuarioLogin>(`/usuarios/${id}`, dataToUpdate);
 
         return data;
     } catch (error: any) {
@@ -81,7 +81,7 @@ const update = async (id: number, dataToUpdate: IUsuarioLogin): Promise<IUsuario
 const deleteById = async (id: number): Promise<undefined | ApiException> => {
 
     try {
-        await API().delete(`/usuarios/${id}`);
+        await Api.delete(`/usuarios/${id}`);
 
         return undefined;
     } catch (error: any) {

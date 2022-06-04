@@ -1,4 +1,4 @@
-import { API } from "../ApiConfig";
+import { Api } from "../ApiConfig";
 import { ApiException } from "../ApiException";
 
 export interface ITarefa {
@@ -10,18 +10,18 @@ export interface ITarefa {
 const getAll = async (): Promise<ITarefa[] | ApiException> => {
     
     try {
-        const { data } = await API().get('/tarefas');
+        const { data } = await Api.get('/tarefas');
 
         return data;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao consultar a API");
+        return new ApiException(error?.message || "Erro ao consultar a Api");
     }
 };
 
 const getById = async (id:number): Promise<ITarefa | ApiException> => {
     
     try {
-        const { data } = await API().get(`/tarefas/${id}`);
+        const { data } = await Api.get(`/tarefas/${id}`);
 
         return data;
     } catch (error: any) {
@@ -32,7 +32,7 @@ const getById = async (id:number): Promise<ITarefa | ApiException> => {
 const create = async (dataToCreate:ITarefa): Promise<ITarefa | ApiException> => {
     
     try {
-        const { data } = await API().post<ITarefa>(`/tarefas`, dataToCreate);
+        const { data } = await Api.post<ITarefa>(`/tarefas`, dataToCreate);
 
         return data;
     } catch (error: any) {
@@ -43,7 +43,7 @@ const create = async (dataToCreate:ITarefa): Promise<ITarefa | ApiException> => 
 const update = async (id:number, dataToUpdate:ITarefa): Promise<ITarefa | ApiException> => {
     
     try {
-        const { data } = await API().put<ITarefa>(`/tarefas/${id}`, dataToUpdate);
+        const { data } = await Api.put<ITarefa>(`/tarefas/${id}`, dataToUpdate);
 
         return data;
     } catch (error: any) {
@@ -54,7 +54,7 @@ const update = async (id:number, dataToUpdate:ITarefa): Promise<ITarefa | ApiExc
 const deleteById = async (id:number): Promise<undefined | ApiException> => {
     
     try {
-        await API().delete(`/tarefas/${id}`);
+        await Api.delete(`/tarefas/${id}`);
 
         return undefined;
     } catch (error: any) {

@@ -1,7 +1,8 @@
-import { Button, Divider, Icon, Skeleton } from "@mui/material"
+import { Divider, Skeleton, useMediaQuery, useTheme } from "@mui/material";
+import { ButtonApp } from "../button-app/ButtonApp";
 
 interface IFerramentasDetalheProps {
-    btnNovoTexto?:string;
+    btnNovoTexto?: string;
     isVisibleBtnNovo?: boolean;
     isVisibleBtnApagar?: boolean;
     isVisibleBtnVoltar?: boolean;
@@ -33,70 +34,64 @@ export const FerramentasDetalhe = ({
     clickSalvar,
     clickSalvarVoltar,
 
-}:IFerramentasDetalheProps) => {
+}: IFerramentasDetalheProps) => {
+    const theme = useTheme();
+    const smDown = useMediaQuery(theme.breakpoints.down('sm'));
+    const mdDown = useMediaQuery(theme.breakpoints.down('md'));
+
     return (
         <>
-            {(isVisibleBtnSalvar && !isLoading) && (<Button
-                variant="contained"
-                color="primary"
-                disableElevation
-                onClick={clickSalvar}
-                startIcon={<Icon>save</Icon>}>
+            {(isVisibleBtnSalvar && !isLoading) &&
+                (<ButtonApp
+                    onClick={() => clickSalvar}
+                    iconButton="save"
+                    variant="contained"
+                    label="Salvar" />
+                )}
 
-                Salvar
+            {isLoading && (<Skeleton width={110} height={60} />)}
 
-            </Button>)}
-            {isLoading && (<Skeleton width={110} height={60}/>)}
+            {(isVisibleBtnSalvaVoltar && !isLoading && !smDown && !mdDown) &&
+                (<ButtonApp
+                    onClick={() => clickSalvarVoltar}
+                    iconButton="save"
+                    label="Salvar e Voltar" />
+                )}
 
-            {(isVisibleBtnSalvaVoltar && !isLoading) && (<Button
-                variant="outlined"
-                color="primary"
-                disableElevation
-                onClick={clickSalvarVoltar}
-                startIcon={<Icon>save</Icon>}>
+            {isLoading && !smDown && !mdDown && (<Skeleton width={180} height={60} />)}
 
-                Salvar e Voltar
+            {(isVisibleBtnApagar && !isLoading) &&
+                (<ButtonApp
+                    onClick={() => clickSalvarVoltar}
+                    iconButton="delete"
+                    label="Apagar" />
+                )}
 
-            </Button>)}
-            {isLoading && (<Skeleton width={180} height={60}/>)}
+            {isLoading && (<Skeleton width={110} height={60} />)}
 
-            {(isVisibleBtnApagar && !isLoading) && (<Button
-                variant="outlined"
-                color="primary"
-                disableElevation
-                onClick={clickApagar}
-                startIcon={<Icon>delete</Icon>}>
+            {(isVisibleBtnNovo && !isLoading && !smDown) &&
+                (<ButtonApp
+                    onClick={() => clickNovo}
+                    iconButton="add"
+                    label={btnNovoTexto} />
+                )}
 
-                Apagar
+            {isLoading && !smDown && (<Skeleton width={110} height={60} />)}
 
-            </Button>)}
-            {isLoading && (<Skeleton width={110} height={60}/>)}
+            {isVisibleBtnApagar && (
+                isVisibleBtnNovo || isVisibleBtnApagar || isVisibleBtnSalvar || isVisibleBtnSalvaVoltar
+            ) && (
+                <Divider variant="middle" orientation="vertical" />
+            )}
 
-            {(isVisibleBtnNovo && !isLoading) && (<Button
-                variant="outlined"
-                color="primary"
-                disableElevation
-                onClick={clickNovo}
-                startIcon={<Icon>add</Icon>}>
+            {(isVisibleBtnVoltar && !isLoading) &&
+                (<ButtonApp
+                    onClick={() => clickVoltar}
+                    iconButton="arrow_back"
+                    label="Voltar" />
+                )}
 
-                {btnNovoTexto}
-
-            </Button>)}
-            {isLoading && (<Skeleton width={110} height={60}/>)}
-
-            <Divider variant="middle" orientation="vertical" />
-
-            {(isVisibleBtnVoltar && !isLoading) && (<Button
-                variant="outlined"
-                color="primary"
-                disableElevation
-                onClick={clickVoltar}
-                startIcon={<Icon>arrow_back</Icon>}>
-
-                Voltar
-
-            </Button>)}
-            {isLoading && (<Skeleton width={110} height={60}/>)}
+            {isLoading && (<Skeleton width={110} height={60} />)}
         </>
     )
 }

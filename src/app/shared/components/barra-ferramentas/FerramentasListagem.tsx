@@ -1,4 +1,5 @@
-import { Box, Button, Icon, TextField } from "@mui/material"
+import { Box, TextField } from "@mui/material";
+import { ButtonApp } from "../button-app/ButtonApp";
 
 
 interface IFerramentasListagemProps {
@@ -30,17 +31,12 @@ export const FerramentasListagem = ({
                 />
             )}
             <Box display="flex" flex={1} justifyContent="end">
-                {(buttonVisible &&
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        disableElevation
-                        onClick={onClickButton}
-                        endIcon={<Icon>add</Icon>}>
-
-                        {textoButton}
-
-                    </Button>)}
+                {buttonVisible &&
+                    (<ButtonApp
+                        onClick={() => onClickButton}
+                        iconButton="add"
+                        label={textoButton} />
+                    )}
             </Box>
         </>
     )

@@ -2,7 +2,7 @@ import { Button, Input } from "@mui/material";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useContextUsuarioLogged } from "../../shared/context";
-import { ApiException, UsuarioService } from "../../shared/services";
+import { UsuarioService } from "../../shared/services";
 
 export const Login = () => {
 
@@ -20,8 +20,8 @@ export const Login = () => {
         console.log(email, password);
 
         UsuarioService.getByUsername(email).then((result) => {
-            if (result instanceof ApiException) {
-                alert(result.message);
+            if (result instanceof Error) {
+                alert((result as { message: string }).message || "Erro ao fazer consulta de usuário");
             } else {
                 const r = result[0];
 

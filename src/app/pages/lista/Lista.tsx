@@ -1,7 +1,6 @@
 import { Button, Input } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 import { LayoutBasePaginas } from "../../shared/layout";
-import { ApiException } from "../../shared/services/api/ApiException";
 import { ITarefa, TarefasService } from "../../shared/services/api/tarefas/TarefasService";
 
 
@@ -12,8 +11,8 @@ export const Lista = () => {
     useEffect(() => {
         TarefasService.getAll()
             .then((result) => {
-                if (result instanceof ApiException) {
-                    alert(result.message);
+                if (result instanceof Error) {
+                    alert((result as { message: string }).message || "Erro ao fazer consulta de tarefas");
                 } else {
                     setLista(result);
                 }
@@ -33,8 +32,8 @@ export const Lista = () => {
                 title: value,
                 isCompleted: false
             }).then((result) => {
-                if (result instanceof ApiException) {
-                    alert(result.message);
+                if (result instanceof Error) {
+                    alert((result as { message: string }).message || "Erro ao fazer cadastro de tarefas");
                 } else {
                     setLista((oldLista) => {
 
@@ -54,8 +53,8 @@ export const Lista = () => {
 
         TarefasService.update(id, item)
             .then((result) => {
-                if (result instanceof ApiException) {
-                    alert(result.message);
+                if (result instanceof Error) {
+                    alert((result as { message: string }).message || "Erro ao fazer atualização de tarefa");
                 } else {
                     setLista((oldLista) => {
                         return oldLista.map(item => {
@@ -73,8 +72,8 @@ export const Lista = () => {
 
         TarefasService.deleteById(id)
             .then((result) => {
-                if (result instanceof ApiException) {
-                    alert(result.message);
+                if (result instanceof Error) {
+                    alert((result as { message: string }).message || "Erro ao deletar");
                 } else {
                     setLista((oldLista) => {
                         return oldLista.filter(item => {

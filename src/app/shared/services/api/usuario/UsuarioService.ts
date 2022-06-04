@@ -1,5 +1,4 @@
 import { Api } from "../ApiConfig";
-import { ApiException } from "../ApiException";
 
 export interface IUsuarioLogin {
     username: string,
@@ -15,29 +14,29 @@ const encryptPassword = (password: string) => {
     return hash;
 }
 
-const getAll = async (): Promise<IUsuarioLogin[] | ApiException> => {
+const getAll = async (): Promise<IUsuarioLogin[] | Error> => {
 
     try {
         const { data } = await Api.get('/usuarios');
 
         return data;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao consultar a API");
+        return new Error(error?.message || "Erro ao consultar a API");
     }
 };
 
-const getById = async (id: number): Promise<IUsuarioLogin | ApiException> => {
+const getById = async (id: number): Promise<IUsuarioLogin | Error> => {
 
     try {
         const { data } = await Api.get(`/usuarios/${id}`);
 
         return data;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao consultar o Registro");
+        return new Error(error?.message || "Erro ao consultar o Registro");
     }
 };
 
-const getByUsername = async (username: string): Promise<IUsuarioLogin[] | ApiException> => {
+const getByUsername = async (username: string): Promise<IUsuarioLogin[] | Error> => {
 
     try {
 
@@ -45,11 +44,11 @@ const getByUsername = async (username: string): Promise<IUsuarioLogin[] | ApiExc
 
         return data;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao consultar o Registro");
+        return new Error(error?.message || "Erro ao consultar o Registro");
     }
 };
 
-const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | ApiException> => {
+const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | Error> => {
 
     try {
         const password = await encryptPassword(dataToCreate.password);
@@ -61,11 +60,11 @@ const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | ApiE
 
         return data;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao criar o Registro");
+        return new Error(error?.message || "Erro ao criar o Registro");
     }
 };
 
-const update = async (id: number, dataToUpdate: IUsuarioLogin): Promise<IUsuarioLogin | ApiException> => {
+const update = async (id: number, dataToUpdate: IUsuarioLogin): Promise<IUsuarioLogin | Error> => {
 
     try {
         dataToUpdate.password = encryptPassword(dataToUpdate.password);
@@ -74,18 +73,18 @@ const update = async (id: number, dataToUpdate: IUsuarioLogin): Promise<IUsuario
 
         return data;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao atualizar o Registro");
+        return new Error(error?.message || "Erro ao atualizar o Registro");
     }
 };
 
-const deleteById = async (id: number): Promise<undefined | ApiException> => {
+const deleteById = async (id: number): Promise<undefined | Error> => {
 
     try {
         await Api.delete(`/usuarios/${id}`);
 
         return undefined;
     } catch (error: any) {
-        return new ApiException(error?.message || "Erro ao deletar o Registro");
+        return new Error(error?.message || "Erro ao deletar o Registro");
     }
 };
 

@@ -1,34 +1,43 @@
 
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { useEffect, useState } from "react";
-import { FerramentasDetalhe, FerramentasListagem } from "../../shared/components";
-import { useAppDrawerContext, useContextUsuarioLogged } from "../../shared/context";
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material';
+import { useCallback, useEffect, useState } from "react";
+import { FerramentasDetalhe } from "../../shared/components";
 import { LayoutBasePaginas } from "../../shared/layout";
-import { IListPessoa, IListPessoaPaginado, PessoasService } from "../../shared/services";
+import { IListPessoa, PessoasService } from "../../shared/services";
 
 export const Dashboard2 = () => {
 
-    const [lista, setLista] = useState<IListPessoa[]>([]);
+    const [listPessoa, setList] = useState<IListPessoa[]>([]);
+
     const [page, setPage] = useState(1);
+    const [limitPage, setLimitPage] = useState(5);
+    const [totalSize, setTotalSize] = useState(0);
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        console.log('ChangePage', newPage)
+        console.log(event)
+        setPage(newPage + 1);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log('handle Change Rows PerPage')
+        setLimitPage(parseInt(event.target.value));
+        setPage(1);
+    };
 
     useEffect(() => {
-        PessoasService.getAll(page)
+        PessoasService.getAll(page, limitPage)
             .then((result) => {
                 if (result instanceof Error)
                     return;
 
-                setLista(result.data);
+                setList(result.data);
+                setTotalSize(result.totalCount);
 
             }).catch((error) => {
                 console.error(error);
             })
-    }, [page])
+    }, [page, limitPage])
 
     return (
         <LayoutBasePaginas titulo="Dashboard" barraFerramentas={<FerramentasDetalhe isVisibleBtnSalvaVoltar />}>
@@ -43,7 +52,7 @@ export const Dashboard2 = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {lista.map((pessoa) => (
+                        {listPessoa.map((pessoa) => (
                             <TableRow
                                 key={pessoa.id}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -59,6 +68,15 @@ export const Dashboard2 = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={totalSize}
+                rowsPerPage={limitPage}
+                page={page - 1}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </LayoutBasePaginas>
     )
 }

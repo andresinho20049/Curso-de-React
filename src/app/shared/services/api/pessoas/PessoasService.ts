@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import { Api } from "../ApiConfig";
 
 export interface IListPessoa {
@@ -20,11 +19,11 @@ export interface IListPessoaPaginado {
     totalCount: number;
 }
 
-const getAll = async (page = 1, filter = ''): Promise<IListPessoaPaginado | Error> => {
+const getAll = async (page = 1, limit = 5, filter = ''): Promise<IListPessoaPaginado | Error> => {
 
     try {
 
-        const path = `/pessoas?_page=${page}&_limit=10%nomeCompleto_like=${filter}`;
+        const path = `/pessoas?_page=${page}&_limit=${limit}&nomeCompleto_like=${filter}`;
         const { data, headers } = await Api.get(path);
 
         if (data) {
@@ -61,15 +60,15 @@ const getById = async (id: number): Promise<IDetalhePessoa | Error> => {
     }
 };
 
-const create = async (body: IDetalhePessoa): Promise<IDetalhePessoa | Error> => {
+const create = async (body: Omit<IDetalhePessoa, 'id'>): Promise<Number | Error> => {
 
     try {
 
         const path = `/pessoas`;
-        const { data } = await Api.post(path, body);
+        const { data } = await Api.post<IDetalhePessoa>(path, body);
 
         if (data)
-            return data;
+            return data.id;
 
 
         return new Error(`Erro ao tentar cadastrar usuário`);
@@ -84,7 +83,7 @@ const update = async (body: IDetalhePessoa): Promise<IDetalhePessoa | Error> => 
 
     try {
 
-        const path = `/pessoas`;
+        const path = `/pessoas/${body.id}`;
         const { data } = await Api.put(path, body);
 
         if (data)

@@ -6,10 +6,10 @@ import storage from './storage';
  * porem, ela armazena o valor setado tbm no storage do browser
  * assim o valor da variavel não se perde ao fechar browser ou apos refresh 
  */
-export default function useStorage(key) {
+export const useStorage = (key:any) => {
   const [state, setState] = useState(() => storage.get(key));
 
-  const set = useCallback(newValue => {
+  const set = useCallback((newValue: any) => {
     storage.set(key, newValue);
     setState(newValue);
   }, [key]);

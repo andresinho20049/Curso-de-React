@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext } from "react";
-import useStorage from "../services/storage/useStorage";
+import { useStorage } from "../hooks";
 
 interface IUsuarioLoggedData {
     token: string | null

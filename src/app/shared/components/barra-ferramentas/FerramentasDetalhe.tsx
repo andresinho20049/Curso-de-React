@@ -11,11 +11,11 @@ interface IFerramentasDetalheProps {
 
     isLoading?: boolean;
 
-    clickNovo?: () => void;
-    clickApagar?: () => void;
-    clickVoltar?: () => void;
-    clickSalvar?: () => void;
-    clickSalvarVoltar?: () => void;
+    clickNovo: () => void;
+    clickApagar: () => void;
+    clickVoltar: () => void;
+    clickSalvar: () => void;
+    clickSalvarVoltar: () => void;
 }
 
 export const FerramentasDetalhe = ({
@@ -43,7 +43,7 @@ export const FerramentasDetalhe = ({
         <>
             {(isVisibleBtnSalvar && !isLoading) &&
                 (<ButtonApp
-                    onClick={() => clickSalvar}
+                    onClick={clickSalvar}
                     iconButton="save"
                     variant="contained"
                     label="Salvar" />
@@ -53,7 +53,7 @@ export const FerramentasDetalhe = ({
 
             {(isVisibleBtnSalvaVoltar && !isLoading && !smDown && !mdDown) &&
                 (<ButtonApp
-                    onClick={() => clickSalvarVoltar}
+                    onClick={clickSalvarVoltar}
                     iconButton="save"
                     label="Salvar e Voltar" />
                 )}
@@ -62,7 +62,7 @@ export const FerramentasDetalhe = ({
 
             {(isVisibleBtnApagar && !isLoading) &&
                 (<ButtonApp
-                    onClick={() => clickSalvarVoltar}
+                    onClick={clickApagar}
                     iconButton="delete"
                     label="Apagar" />
                 )}
@@ -71,7 +71,7 @@ export const FerramentasDetalhe = ({
 
             {(isVisibleBtnNovo && !isLoading && !smDown) &&
                 (<ButtonApp
-                    onClick={() => clickNovo}
+                    onClick={clickNovo}
                     iconButton="add"
                     label={btnNovoTexto} />
                 )}
@@ -86,7 +86,7 @@ export const FerramentasDetalhe = ({
 
             {(isVisibleBtnVoltar && !isLoading) &&
                 (<ButtonApp
-                    onClick={() => clickVoltar}
+                    onClick={clickVoltar}
                     iconButton="arrow_back"
                     label="Voltar" />
                 )}

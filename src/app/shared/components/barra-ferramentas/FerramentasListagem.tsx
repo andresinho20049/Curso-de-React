@@ -33,7 +33,7 @@ export const FerramentasListagem = ({
             <Box display="flex" flex={1} justifyContent="end">
                 {buttonVisible &&
                     (<ButtonApp
-                        onClick={() => onClickButton}
+                        onClick={() => onClickButton?.()}
                         iconButton="add"
                         label={textoButton} />
                     )}

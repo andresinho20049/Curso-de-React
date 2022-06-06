@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, Dashboard2, Lista, ListagemCidades, ListagemPessoas } from "../pages"
+import { Dashboard, DetalhePessoas, Lista, ListagemCidades, ListagemPessoas } from "../pages"
 import { MenuLateral } from "../shared/components"
 import { useAppDrawerContext } from "../shared/context"
 
@@ -44,10 +44,10 @@ export const RoteamentoPrivado = () => {
             <MenuLateral>
                 <Routes>
                     <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/dashboard2" element={<Dashboard2 />} />
                     <Route path="/pessoas" element={<ListagemPessoas />} />
                     <Route path="/cidades" element={<ListagemCidades />} />
-                    {/* <Route path="/cidades/detalhe/:id" element={<Dashboard2 />} /> */}
+                    <Route path="/pessoas/detalhe" element={<DetalhePessoas />} />
+                    <Route path="/pessoas/detalhe/:id" element={<DetalhePessoas />} />
                     <Route path="/lista" element={<Lista />} />
 
                     <Route path="*" element={<Navigate to="/dashboard" />} />

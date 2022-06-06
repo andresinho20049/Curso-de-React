@@ -29,7 +29,7 @@ const getAll = async (page = 1, limit = 5, filter = ''): Promise<IListPessoaPagi
         if (data) {
             return {
                 data,
-                totalCount: Number(headers["x-total-count"]) || 10
+                totalCount: Number(headers["x-total-count"]) || 0
             }
         }
 

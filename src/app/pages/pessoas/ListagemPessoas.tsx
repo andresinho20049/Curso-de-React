@@ -92,7 +92,7 @@ export const ListagemPessoas = () => {
                 <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Ações</TableCell>
+                            <TableCell width={100}>Ações</TableCell>
                             <TableCell>Nome Completo</TableCell>
                             <TableCell>Email</TableCell>
                         </TableRow>

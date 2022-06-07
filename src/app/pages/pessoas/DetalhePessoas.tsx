@@ -98,10 +98,10 @@ export const DetalhePessoas = () => {
 
             })
             .catch((errors: yup.ValidationError) => {
-                const validationErrors : { [key: string]: string} = {}
+                const validationErrors: { [key: string]: string } = {}
 
                 errors.inner.forEach(error => {
-                    if (!error.path) return;
+                    if (!error.path || validationErrors[error.path]) return;
 
                     validationErrors[error.path] = error.message
                 });
@@ -187,6 +187,7 @@ export const DetalhePessoas = () => {
                                     fullWidth
                                     name="cidadeId"
                                     label="Cidade"
+                                    type="number"
                                     disabled={isLoading}
                                 />
                             </Grid>

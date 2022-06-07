@@ -11,6 +11,12 @@
       "email": "andrey@email.com",
       "cidadeId": "2",
       "id": 2
+    },
+    {
+      "id": 3,
+      "cidadeId": 5,
+      "email": "andre@email.com",
+      "nomeCompleto": "André Carlos"
     }
   ],
   "tarefas": [],

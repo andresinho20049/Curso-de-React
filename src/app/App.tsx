@@ -1,5 +1,5 @@
 import { UsuarioLoggedProvider, AppThemeProvider } from "./shared/context";
-import './shared/hooks/TraducoesYup'
+import './shared/form/TraducoesYup'
 import { Rotas } from "./routes";
 
 export const App = () => {

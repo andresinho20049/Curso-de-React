@@ -2,18 +2,6 @@ import { setLocale } from "yup";
 
 setLocale({
     mixed: {
-        required: ({label}) => `O ${label} é um campo obrigatório` 
-    }
-})
-
-setLocale({
-    mixed: {
-        required: "O ${label} é um campo obrigatório"
-    }
-})
-
-setLocale({
-    mixed: {
         required: "Este campo é obrigatório",
         oneOf: "Deve ser um dos seguintes valores: ${values}",
         notOneOf: "Não pode ser um dos seguintes valores: ${values}",

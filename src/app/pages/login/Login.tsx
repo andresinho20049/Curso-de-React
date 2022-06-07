@@ -21,7 +21,7 @@ export const Login = () => {
 
         UsuarioService.getByUsername(email).then((result) => {
             if (result instanceof Error) {
-                alert((result as { message: string }).message || "Erro ao fazer consulta de usuário");
+                alert(result.message);
             } else {
                 const r = result[0];
 

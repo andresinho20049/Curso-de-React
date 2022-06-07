@@ -1,0 +1,24 @@
+{
+  "pessoas": [
+    {
+      "nomeCompleto": "Andre",
+      "email": "andresinho20049@email.com",
+      "cidadeId": "1",
+      "id": 1
+    },
+    {
+      "nomeCompleto": "Andrey",
+      "email": "andrey@email.com",
+      "cidadeId": "2",
+      "id": 2
+    }
+  ],
+  "tarefas": [],
+  "usuarios": [
+    {
+      "username": "admin@admin.com",
+      "password": "$2a$10$aFp8gNtFblnyzFReFuiwuOubYqCB4e6AlrFflLjN2fTIjxOR2CQdW",
+      "id": 1
+    }
+  ]
+}

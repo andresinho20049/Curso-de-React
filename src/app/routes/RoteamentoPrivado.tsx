@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
-import { Dashboard, DetalhePessoas, Lista, ListagemCidades, ListagemPessoas } from "../pages"
+import { Dashboard, DetalhePessoas, ListagemCidades, ListagemPessoas } from "../pages"
 import { MenuLateral } from "../shared/components"
 import { useAppDrawerContext } from "../shared/context"
 
@@ -17,11 +17,6 @@ export const RoteamentoPrivado = () => {
                 path: '/dashboard'
             },
             {
-                label: 'Dashboard Det',
-                icon: 'assessment',
-                path: '/dashboard2'
-            },
-            {
                 label: 'Pessoas',
                 icon: 'people',
                 path: '/pessoas'
@@ -30,11 +25,6 @@ export const RoteamentoPrivado = () => {
                 label: 'Cidades',
                 icon: 'location_city',
                 path: '/cidades'
-            },
-            {
-                label: 'Lista',
-                icon: 'edit',
-                path: '/lista'
             }
         ])
     }, [])
@@ -48,7 +38,6 @@ export const RoteamentoPrivado = () => {
                     <Route path="/cidades" element={<ListagemCidades />} />
                     <Route path="/pessoas/detalhe" element={<DetalhePessoas />} />
                     <Route path="/pessoas/detalhe/:id" element={<DetalhePessoas />} />
-                    <Route path="/lista" element={<Lista />} />
 
                     <Route path="*" element={<Navigate to="/dashboard" />} />
                 </Routes>

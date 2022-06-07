@@ -53,8 +53,6 @@ const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | Erro
     try {
         const password = await encryptPassword(dataToCreate.password);
         dataToCreate.password = password;
-        console.log(dataToCreate)
-        console.log(password);
 
         const { data } = await Api.post<IUsuarioLogin>(`/usuarios`, dataToCreate);
 

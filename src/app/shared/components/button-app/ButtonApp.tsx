@@ -20,7 +20,7 @@ export const ButtonApp = ({
             variant={variant}
             color={color}
             disableElevation
-            onClick={() => onClick()}
+            onClick={onClick}
             startIcon={<Icon>{iconButton}</Icon>}>
 
             <Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">

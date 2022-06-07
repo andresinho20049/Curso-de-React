@@ -1,6 +1,5 @@
 export * from './dashboard/Dashboard'
 export * from './login/Login'
-export * from './lista/Lista'
 export * from './cidades/ListagemCidades'
 export * from './pessoas/ListagemPessoas'
 export * from './pessoas/DetalhePessoas'

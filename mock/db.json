@@ -1,0 +1,11 @@
+{
+  "pessoas": [],
+  "cidades": [],
+  "usuarios": [
+    {
+      "username": "admin@admin.com",
+      "password": "$2a$10$aFp8gNtFblnyzFReFuiwuOubYqCB4e6AlrFflLjN2fTIjxOR2CQdW",
+      "id": 1
+    }
+  ]
+}

@@ -6,12 +6,15 @@ import { IListPessoa, PessoasService } from "../../shared/services";
 import { FerramentasListagem } from "../../shared/components"
 import { LayoutBasePaginas } from "../../shared/layout"
 import { useDobounce } from "../../shared/hooks";
+import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 
 
 export const ListagemPessoas = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDobounce();
     const navigate = useNavigate();
+
+    const { showMsg } = useSnackbarAppContext();
 
     const [rows, setRows] = useState<IListPessoa[]>([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -50,11 +53,10 @@ export const ListagemPessoas = () => {
                     setLoading(false);
 
                     if (result instanceof Error) {
-                        console.log(result.message);
+                        showMsg(result.message, true);
                         return;
                     }
 
-                    console.log(result)
                     setRows(result.data);
                     setTotalCount(result.totalCount);
                 })
@@ -66,8 +68,9 @@ export const ListagemPessoas = () => {
             PessoasService.deleteById(id)
             .then((result) => {
                 if(result instanceof Error){
-                    alert(result.message)
+                    showMsg(result.message, true)
                 } else {
+                    showMsg("Pessoa apagada com sucesso!");
                     setRows(oldRows => oldRows.filter(p => p.id !== id))
                 }
             })

@@ -1,11 +1,12 @@
-import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { FerramentasDetalhe } from "../../shared/components";
 import { IAutocompleteOptions, VAutocomplete, VTextField } from "../../shared/components/forms";
+import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 import { LayoutBasePaginas } from "../../shared/layout";
 import { CidadesService, IDetalhePessoa, PessoasService } from "../../shared/services";
 
@@ -14,6 +15,8 @@ export const DetalhePessoas = () => {
     var isSaveAndClose = false;
     const { id } = useParams<'id'>();
     const navigate = useNavigate();
+
+    const { showMsg } = useSnackbarAppContext();
 
     const formRef = useRef<FormHandles>(null);
 
@@ -26,16 +29,16 @@ export const DetalhePessoas = () => {
         cidadeId: yup.number().required()
     })
 
-    const findAutocompleteCidade = useCallback(async (busca:string):Promise<IAutocompleteOptions[]> => {
-        
-        const result = await CidadesService.getAll(1, 50, busca);
+    const findAutocompleteCidade = useCallback(async (busca: string): Promise<IAutocompleteOptions[]> => {
 
-        if(result instanceof Error) return [] as IAutocompleteOptions[];
+        const result = await CidadesService.getAll(1, 5, busca);
+
+        if (result instanceof Error) return [] as IAutocompleteOptions[];
 
         return result.data.map((cidade) => (
-            {id: cidade.id, label: cidade.nome}
+            { id: cidade.id, label: cidade.nome }
         ))
-        
+
     }, [])
 
     useEffect(() => {
@@ -45,7 +48,7 @@ export const DetalhePessoas = () => {
             PessoasService.getById(Number(id))
                 .then((result) => {
                     if (result instanceof Error) {
-                        alert(result.message);
+                        showMsg(result.message, true);
                         navigate('/pessoas');
                     } else {
                         setNome(result.nomeCompleto);
@@ -65,19 +68,18 @@ export const DetalhePessoas = () => {
 
     const handleSave = (dados: IDetalhePessoa) => {
 
-        console.log(dados)
         formValidSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValid) => {
-
 
                 setIsLoading(true);
                 if (id === undefined) {
                     PessoasService.create(dadosValid)
                         .then((result) => {
                             if (result instanceof Error) {
-                                alert(result.message);
+                                showMsg(result.message);
                             } else {
+                                showMsg("Pessoa cadastrada com sucesso!");
                                 if (isSaveAndClose) {
                                     navigate('/pessoas')
                                 } else {
@@ -90,8 +92,9 @@ export const DetalhePessoas = () => {
                     PessoasService.update({ id: Number(id), ...dadosValid })
                         .then((result) => {
                             if (result instanceof Error) {
-                                alert(result.message);
+                                showMsg(result.message);
                             } else {
+                                showMsg("Pessoa atualizada com sucesso!");
                                 if (isSaveAndClose) {
                                     navigate('/pessoas');
                                 } else {
@@ -111,7 +114,6 @@ export const DetalhePessoas = () => {
 
                     validationErrors[error.path] = error.message
                 });
-                console.log(validationErrors);
                 formRef.current?.setErrors(validationErrors);
             })
     }
@@ -121,10 +123,9 @@ export const DetalhePessoas = () => {
             PessoasService.deleteById(Number(id))
                 .then(result => {
                     if (result instanceof Error) {
-                        alert(result.message)
-                        // navigate('/pessoas')
+                        showMsg(result.message, true)
                     } else {
-                        alert('Registro apagado com sucesso!')
+                        showMsg('Registro apagado com sucesso!')
                         navigate('/pessoas')
                     }
                 })
@@ -148,8 +149,6 @@ export const DetalhePessoas = () => {
                     clickVoltar={() => navigate('/pessoas')}
                     clickNovo={() => navigate('/pessoas/detalhe')}
                 />}>
-
-
 
             <Form ref={formRef} onSubmit={handleSave}>
 

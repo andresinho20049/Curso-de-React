@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { FerramentasDetalhe } from "../../shared/components";
 import { VTextField } from "../../shared/components/forms";
+import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 import { LayoutBasePaginas } from "../../shared/layout";
 import { CidadesService } from "../../shared/services";
 
@@ -19,6 +20,8 @@ export const DetalheCidades = () => {
     var isSaveAndClose = false;
     const { id } = useParams<'id'>();
     const navigate = useNavigate();
+
+    const { showMsg } = useSnackbarAppContext();
 
     const formRef = useRef<FormHandles>(null);
 
@@ -36,7 +39,7 @@ export const DetalheCidades = () => {
             CidadesService.getById(Number(id))
                 .then((result) => {
                     if (result instanceof Error) {
-                        alert(result.message);
+                        showMsg(result.message, true);
                         navigate('/cidades');
                     } else {
                         setNome(result.nome);
@@ -64,8 +67,9 @@ export const DetalheCidades = () => {
                     CidadesService.create(dadosValid)
                         .then((result) => {
                             if (result instanceof Error) {
-                                alert(result.message);
+                                showMsg(result.message, true);
                             } else {
+                                showMsg('Cidade cadastrada com sucesso!');
                                 if (isSaveAndClose) {
                                     navigate('/cidades')
                                 } else {
@@ -78,8 +82,9 @@ export const DetalheCidades = () => {
                     CidadesService.update({ id: Number(id), ...dadosValid })
                         .then((result) => {
                             if (result instanceof Error) {
-                                alert(result.message);
+                                showMsg(result.message, true);
                             } else {
+                                showMsg('Cidade atualizada com sucesso!');
                                 if (isSaveAndClose) {
                                     navigate('/cidades');
                                 } else {
@@ -99,7 +104,6 @@ export const DetalheCidades = () => {
 
                     validationErrors[error.path] = error.message
                 });
-                console.log(validationErrors);
                 formRef.current?.setErrors(validationErrors);
             })
     }
@@ -109,10 +113,9 @@ export const DetalheCidades = () => {
             CidadesService.deleteById(Number(id))
                 .then(result => {
                     if (result instanceof Error) {
-                        alert(result.message)
-                        // navigate('/cidades')
+                        showMsg(result.message, true)
                     } else {
-                        alert('Registro apagado com sucesso!')
+                        showMsg('Registro apagado com sucesso!')
                         navigate('/cidades')
                     }
                 })

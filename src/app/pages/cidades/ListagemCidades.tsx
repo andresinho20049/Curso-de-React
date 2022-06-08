@@ -2,6 +2,7 @@ import { Icon, IconButton, LinearProgress, Paper, Table, TableBody, TableCell, T
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { FerramentasListagem } from "../../shared/components"
+import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 import { useDobounce } from "../../shared/hooks";
 import { LayoutBasePaginas } from "../../shared/layout"
 import { CidadesService, ICidadeData } from "../../shared/services";
@@ -11,6 +12,8 @@ export const ListagemCidades = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDobounce();
     const navigate = useNavigate();
+
+    const { showMsg } = useSnackbarAppContext();
 
     const [rows, setRows] = useState<ICidadeData[]>([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -65,8 +68,9 @@ export const ListagemCidades = () => {
             CidadesService.deleteById(id)
             .then((result) => {
                 if(result instanceof Error){
-                    alert(result.message)
+                    showMsg(result.message, true)
                 } else {
+                    showMsg("Cidade apagada com sucesso!");
                     setRows(oldRows => oldRows.filter(p => p.id !== id))
                 }
             })

@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Icon, IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
 
-import { BarraFerramentasContainer, ContentContainer, LayoutContainer, TitleContainer } from "../components";
+import { BarraFerramentasContainer, ContentContainer, LayoutContainer, SnackbarApp, TitleContainer } from "../components";
 import { useAppDrawerContext } from "../context";
 
 interface ILayoutBasePaginasProps {
@@ -29,13 +29,13 @@ export const LayoutBasePaginas = ({ titulo, children, barraFerramentas }: ILayou
                     </IconButton>
                 )}
 
-                <Typography 
-                    variant={smDown ? "h5" : mdDown ? "h4" : "h3" }
-                    whiteSpace="nowrap" 
-                    overflow="hidden" 
+                <Typography
+                    variant={smDown ? "h5" : mdDown ? "h4" : "h3"}
+                    whiteSpace="nowrap"
+                    overflow="hidden"
                     textOverflow="ellipsis"
                 >
-                    
+
                     {titulo}
                 </Typography>
             </TitleContainer>
@@ -48,6 +48,8 @@ export const LayoutBasePaginas = ({ titulo, children, barraFerramentas }: ILayou
             <ContentContainer>
                 {children}
             </ContentContainer>
+
+            <SnackbarApp />
 
         </LayoutContainer>
     );

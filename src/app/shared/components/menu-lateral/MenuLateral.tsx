@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, Drawer, List, useMediaQuery, useTheme } from "@mui/material"
 import { ReactNode } from "react";
-import { useAppDrawerContext, useAppThemeContext, useContextUsuarioLogged } from "../../context";
+import { useAppDrawerContext, useAppThemeContext, useContextAuthentication } from "../../context";
 import { ButtonItemDrawerApp, ToggleButtonDrawer } from "./ButtonItemDrawerApp";
 
 interface IMenuLateralProps {
@@ -12,7 +12,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
     const smDown = useMediaQuery(theme.breakpoints.down('sm'));
 
     const { toggleTheme } = useAppThemeContext();
-    const { setToken } = useContextUsuarioLogged();
+    const { logout } = useContextAuthentication();
     const { drawerOpen, toggleDrawer, drawerOptions } = useAppDrawerContext();
 
     return (
@@ -39,7 +39,7 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
                     </Box>
                     <Box>
                         <ToggleButtonDrawer onClick={toggleTheme} />
-                        <ButtonItemDrawerApp to="/login" icone="logout" onClick={() => setToken(null)}>
+                        <ButtonItemDrawerApp to="/login" icone="logout" onClick={logout}>
                             Logout
                         </ButtonItemDrawerApp>
                     </Box>

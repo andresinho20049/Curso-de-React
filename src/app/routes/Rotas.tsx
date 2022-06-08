@@ -1,11 +1,11 @@
-import { AppDrawerProvider, useContextUsuarioLogged } from "../shared/context"
+import { AppDrawerProvider, useContextAuthentication } from "../shared/context"
 import { Roteamento } from "./Roteamento";
 import { RoteamentoPrivado } from "./RoteamentoPrivado";
 
 export const Rotas = () => {
-    const { token } = useContextUsuarioLogged();
+    const { isAuthenticated } = useContextAuthentication();
 
-    if (token === null)
+    if (!isAuthenticated)
         return <Roteamento />
 
     return (

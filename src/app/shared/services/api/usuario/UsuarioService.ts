@@ -1,17 +1,29 @@
 import { Api } from "../ApiConfig";
 
+const bcrypt = require('bcryptjs');
+
 export interface IUsuarioLogin {
     username: string,
     password: string
 }
 
 const encryptPassword = (password: string) => {
-    const bcrypt = require('bcryptjs');
 
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
     return hash;
+}
+
+const auth = async (login: IUsuarioLogin): Promise<Boolean> => {
+    
+    const result = await getByUsername(login.username);
+
+    if(result instanceof Error || result.length === 0) return false;
+
+    const user = result[0];
+    
+    return bcrypt.compareSync(login.password, user.password);
 }
 
 const getAll = async (): Promise<IUsuarioLogin[] | Error> => {
@@ -87,6 +99,7 @@ const deleteById = async (id: number): Promise<undefined | Error> => {
 };
 
 export const UsuarioService = {
+    auth,
     getAll,
     create,
     getById,

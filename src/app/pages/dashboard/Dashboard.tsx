@@ -1,13 +1,10 @@
 import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FerramentasListagem } from "../../shared/components";
-import { useContextUsuarioLogged } from "../../shared/context";
 import { LayoutBasePaginas } from "../../shared/layout";
 import { CidadesService, PessoasService } from "../../shared/services";
 
 export const Dashboard = () => {
-
-    const { setToken } = useContextUsuarioLogged();
 
     const [totalPessoas, setTotalPessoas] = useState(0);
     const [isLoadingPessoas, setLoadingPessoas] = useState(true);

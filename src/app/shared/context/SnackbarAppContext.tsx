@@ -36,14 +36,12 @@ export const SnackbarAppProvider = ({ children }: ISnackbarAppProviderProps) => 
         return <Slide direction="up" {...props} />
     }
 
-    const showMsg = useCallback((
-        msg: string,
-        isError = false
-    ) => {
-        console.log(msg);
+    const showMsg = useCallback((msg: string, isError = false) => {
+
         setIsMsgError(isError);
         setTransition(() => slideUp)
         setSnackMsg(msg);
+        
     }, [snackMsg])
 
     const closeMsg = useCallback(() => {

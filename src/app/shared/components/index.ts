@@ -1,4 +1,5 @@
 export * from './menu-lateral/MenuLateral'
+export * from './dialog-app/DialogConfirm'
 export * from './snackbar-app/SnackbarApp'
 export * from './layout-paginas/LayoutContainer'
 export * from './menu-lateral/ButtonItemDrawerApp'

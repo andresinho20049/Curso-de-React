@@ -4,8 +4,9 @@ import { Form } from "@unform/web";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
-import { FerramentasDetalhe } from "../../shared/components";
+import { DialogConfirm, FerramentasDetalhe } from "../../shared/components";
 import { IAutocompleteOptions, VAutocomplete, VTextField } from "../../shared/components/forms";
+import { useDialogConfirmAppContext } from "../../shared/context";
 import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 import { LayoutBasePaginas } from "../../shared/layout";
 import { CidadesService, IDetalhePessoa, PessoasService } from "../../shared/services";
@@ -17,6 +18,7 @@ export const DetalhePessoas = () => {
     const navigate = useNavigate();
 
     const { showMsg } = useSnackbarAppContext();
+    const { handleOpenDialog } = useDialogConfirmAppContext();
 
     const formRef = useRef<FormHandles>(null);
 
@@ -42,7 +44,6 @@ export const DetalhePessoas = () => {
     }, [])
 
     useEffect(() => {
-        console.log(id);
         if (id !== undefined) {
             setIsLoading(true);
             PessoasService.getById(Number(id))
@@ -118,19 +119,17 @@ export const DetalhePessoas = () => {
             })
     }
 
-    const handleDelete = () => {
-        if (window.confirm(`Deseja excluir realmente? ${nome}`)) {
-            PessoasService.deleteById(Number(id))
-                .then(result => {
-                    if (result instanceof Error) {
-                        showMsg(result.message, true)
-                    } else {
-                        showMsg('Registro apagado com sucesso!')
-                        navigate('/pessoas')
-                    }
-                })
-        }
-    }
+    const handleDelete = useCallback((id: number) => {
+        PessoasService.deleteById(Number(id))
+            .then(result => {
+                if (result instanceof Error) {
+                    showMsg(result.message, true)
+                } else {
+                    showMsg('Registro apagado com sucesso!')
+                    navigate('/pessoas')
+                }
+            })
+    }, [])
 
     return (
         <LayoutBasePaginas
@@ -144,7 +143,7 @@ export const DetalhePessoas = () => {
                     isLoading={isLoading}
 
                     clickSalvar={() => { isSaveAndClose = false; formRef.current?.submitForm(); }}
-                    clickApagar={handleDelete}
+                    clickApagar={() => handleOpenDialog(Number(id))}
                     clickSalvarVoltar={() => { isSaveAndClose = true; formRef.current?.submitForm(); }}
                     clickVoltar={() => navigate('/pessoas')}
                     clickNovo={() => navigate('/pessoas/detalhe')}
@@ -199,6 +198,15 @@ export const DetalhePessoas = () => {
                     </Grid>
                 </Box>
             </Form>
+
+            <DialogConfirm
+                titleDialog="Excluir pessoa"
+                contextTextDialog={`
+                    Deseja realmente excluir a pessoa (${nome})? 
+                    Caso queira continuar é só clicar em confirmar.
+                `}
+                handleActionDialog={() => handleDelete(Number(id))}
+            />
 
         </LayoutBasePaginas >
     )

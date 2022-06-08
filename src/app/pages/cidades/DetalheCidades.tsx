@@ -1,11 +1,12 @@
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
-import { FerramentasDetalhe } from "../../shared/components";
+import { DialogConfirm, FerramentasDetalhe } from "../../shared/components";
 import { VTextField } from "../../shared/components/forms";
+import { useDialogConfirmAppContext } from "../../shared/context";
 import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 import { LayoutBasePaginas } from "../../shared/layout";
 import { CidadesService } from "../../shared/services";
@@ -20,6 +21,7 @@ export const DetalheCidades = () => {
     var isSaveAndClose = false;
     const { id } = useParams<'id'>();
     const navigate = useNavigate();
+    const { handleOpenDialog } = useDialogConfirmAppContext();
 
     const { showMsg } = useSnackbarAppContext();
 
@@ -33,7 +35,6 @@ export const DetalheCidades = () => {
     })
 
     useEffect(() => {
-        console.log(id);
         if (id !== undefined) {
             setIsLoading(true);
             CidadesService.getById(Number(id))
@@ -108,19 +109,18 @@ export const DetalheCidades = () => {
             })
     }
 
-    const handleDelete = () => {
-        if (window.confirm(`Deseja excluir realmente? ${nome}`)) {
-            CidadesService.deleteById(Number(id))
-                .then(result => {
-                    if (result instanceof Error) {
-                        showMsg(result.message, true)
-                    } else {
-                        showMsg('Registro apagado com sucesso!')
-                        navigate('/cidades')
-                    }
-                })
-        }
-    }
+
+    const handleDelete = useCallback((id: number) => {
+        CidadesService.deleteById(Number(id))
+            .then(result => {
+                if (result instanceof Error) {
+                    showMsg(result.message, true)
+                } else {
+                    showMsg('Registro apagado com sucesso!')
+                    navigate('/cidades')
+                }
+            })
+    }, [])
 
     return (
         <LayoutBasePaginas
@@ -134,7 +134,7 @@ export const DetalheCidades = () => {
                     isLoading={isLoading}
 
                     clickSalvar={() => { isSaveAndClose = false; formRef.current?.submitForm(); }}
-                    clickApagar={handleDelete}
+                    clickApagar={() => handleOpenDialog(Number(id))}
                     clickSalvarVoltar={() => { isSaveAndClose = true; formRef.current?.submitForm(); }}
                     clickVoltar={() => navigate('/cidades')}
                     clickNovo={() => navigate('/cidades/detalhe')}
@@ -171,6 +171,15 @@ export const DetalheCidades = () => {
                     </Grid>
                 </Box>
             </Form>
+
+            <DialogConfirm
+                titleDialog="Excluir cidade"
+                contextTextDialog={`
+                    Deseja realmente excluir a cidade (${nome})? 
+                    Caso queira continuar é só clicar em confirmar.
+                `}
+                handleActionDialog={() => handleDelete(Number(id))}
+            />
 
         </LayoutBasePaginas >
     )

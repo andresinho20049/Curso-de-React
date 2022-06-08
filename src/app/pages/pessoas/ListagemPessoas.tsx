@@ -3,46 +3,56 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { Icon, IconButton, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from '@mui/material';
 
 import { IListPessoa, PessoasService } from "../../shared/services";
-import { FerramentasListagem } from "../../shared/components"
+import { DialogConfirm, FerramentasListagem } from "../../shared/components"
 import { LayoutBasePaginas } from "../../shared/layout"
 import { useDobounce } from "../../shared/hooks";
 import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
+import { useDialogConfirmAppContext } from "../../shared/context";
 
+
+interface ISelectedItemData {
+    id: number;
+    nome: string;
+}
 
 export const ListagemPessoas = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const { debounce } = useDobounce();
     const navigate = useNavigate();
-
+    const { debounce } = useDobounce();
     const { showMsg } = useSnackbarAppContext();
-
-    const [rows, setRows] = useState<IListPessoa[]>([]);
-    const [totalCount, setTotalCount] = useState(0);
-
+    const { handleOpenDialog } = useDialogConfirmAppContext();
+    const [selectedItem, setSelectedItem] = useState({} as ISelectedItemData);
+    
+    
     const [limitPage, setLimitPage] = useState(5);
+    const [totalCount, setTotalCount] = useState(0);
+    const [rows, setRows] = useState<IListPessoa[]>([]);
+    
+    
+    // Busca e pagina no SearchParams
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const [isLoading, setLoading] = useState(true);
-
+    const busca = useMemo(() => {
+        return searchParams.get('busca') || '';
+    }, [searchParams]);
+    
+    const pagina = useMemo(() => {
+        return Number(searchParams.get('pagina') || '1');
+    }, [searchParams]);
+    
     const handleChangePage = (event: unknown, newPage: number) => {
         console.log('ChangePage', newPage)
         console.log(event)
         setSearchParams({ busca, pagina: String(newPage + 1) }, { replace: true })
     };
-
+    
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
         console.log('handle Change Rows PerPage')
         setLimitPage(parseInt(event.target.value));
         setSearchParams({ busca, pagina: '1' }, { replace: true })
     };
 
-    const busca = useMemo(() => {
-        return searchParams.get('busca') || '';
-    }, [searchParams]);
-
-    const pagina = useMemo(() => {
-        return Number(searchParams.get('pagina') || '1');
-    }, [searchParams]);
-
+    
+    const [isLoading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
@@ -63,19 +73,22 @@ export const ListagemPessoas = () => {
         })
     }, [pagina, limitPage, busca])
 
+
+    const handleConfirmDelete = useCallback((selectedItem: ISelectedItemData) => {
+        setSelectedItem(selectedItem);
+        handleOpenDialog(selectedItem.id);
+    }, [selectedItem])
+
     const handleDelete = useCallback((id: number) => {
-        if(window.confirm("Realmente deseja apagar?")){
-            PessoasService.deleteById(id)
+        PessoasService.deleteById(id)
             .then((result) => {
-                if(result instanceof Error){
+                if (result instanceof Error) {
                     showMsg(result.message, true)
                 } else {
                     showMsg("Pessoa apagada com sucesso!");
                     setRows(oldRows => oldRows.filter(p => p.id !== id))
                 }
             })
-        }
-            
     }, [])
 
     return (
@@ -107,7 +120,7 @@ export const ListagemPessoas = () => {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell>
-                                    <IconButton onClick={() => handleDelete(pessoa.id)} size="small">
+                                    <IconButton onClick={() => handleConfirmDelete({ id: pessoa.id, nome: pessoa.nomeCompleto })} size="small">
                                         <Icon>delete</Icon>
                                     </IconButton>
                                     <IconButton onClick={() => navigate(`/pessoas/detalhe/${pessoa.id}`)} size="small">
@@ -151,6 +164,15 @@ export const ListagemPessoas = () => {
                     </TableFooter>
                 </Table>
             </TableContainer>
+
+            <DialogConfirm
+                titleDialog="Excluir pessoa"
+                contextTextDialog={`
+                    Deseja realmente excluir a pessoa (${selectedItem.nome})? 
+                    Caso queira continuar é só clicar em confirmar.
+                `}
+                handleActionDialog={() => handleDelete(selectedItem.id)}
+            />
 
         </LayoutBasePaginas >
 

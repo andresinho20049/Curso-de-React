@@ -1,7 +1,8 @@
 import { Icon, IconButton, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom"
-import { FerramentasListagem } from "../../shared/components"
+import { DialogConfirm, FerramentasListagem } from "../../shared/components"
+import { useDialogConfirmAppContext } from "../../shared/context";
 import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
 import { useDobounce } from "../../shared/hooks";
 import { LayoutBasePaginas } from "../../shared/layout"
@@ -9,40 +10,40 @@ import { CidadesService, ICidadeData } from "../../shared/services";
 
 
 export const ListagemCidades = () => {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const { debounce } = useDobounce();
     const navigate = useNavigate();
-
+    const { debounce } = useDobounce();
     const { showMsg } = useSnackbarAppContext();
+    const { handleOpenDialog } = useDialogConfirmAppContext();
+    const [selectedItem, setSelectedItem] = useState({} as ICidadeData)
+
 
     const [rows, setRows] = useState<ICidadeData[]>([]);
     const [totalCount, setTotalCount] = useState(0);
-
     const [limitPage, setLimitPage] = useState(5);
 
-    const [isLoading, setLoading] = useState(true);
-
-    const handleChangePage = (event: unknown, newPage: number) => {
-        console.log('ChangePage', newPage)
-        console.log(event)
-        setSearchParams({ busca, pagina: String(newPage + 1) }, { replace: true })
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('handle Change Rows PerPage')
-        setLimitPage(parseInt(event.target.value));
-        setSearchParams({ busca, pagina: '1' }, { replace: true })
-    };
-
+    
+    //Busca e troca de pagina usando SearchParams
+    const [searchParams, setSearchParams] = useSearchParams();
+    
     const busca = useMemo(() => {
         return searchParams.get('busca') || '';
     }, [searchParams]);
-
+    
     const pagina = useMemo(() => {
         return Number(searchParams.get('pagina') || '1');
     }, [searchParams]);
 
-
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setSearchParams({ busca, pagina: String(newPage + 1) }, { replace: true })
+    };
+    
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setLimitPage(parseInt(event.target.value));
+        setSearchParams({ busca, pagina: '1' }, { replace: true })
+    };
+    
+    const [isLoading, setLoading] = useState(true);
+    
     useEffect(() => {
         setLoading(true);
 
@@ -52,30 +53,31 @@ export const ListagemCidades = () => {
                     setLoading(false);
 
                     if (result instanceof Error) {
-                        console.log(result.message);
+                        showMsg(result.message, true);
                         return;
                     }
 
-                    console.log(result)
                     setRows(result.data);
                     setTotalCount(result.totalCount);
                 })
         })
     }, [pagina, limitPage, busca])
 
+    const handleConfirmDelete = useCallback((selectedItem: ICidadeData) => {
+        setSelectedItem(selectedItem);
+        handleOpenDialog(selectedItem.id);
+    }, [selectedItem])
+
     const handleDelete = useCallback((id: number) => {
-        if(window.confirm("Realmente deseja apagar?")){
-            CidadesService.deleteById(id)
+        CidadesService.deleteById(id)
             .then((result) => {
-                if(result instanceof Error){
+                if (result instanceof Error) {
                     showMsg(result.message, true)
                 } else {
                     showMsg("Cidade apagada com sucesso!");
                     setRows(oldRows => oldRows.filter(p => p.id !== id))
                 }
             })
-        }
-            
     }, [])
 
     return (
@@ -106,7 +108,7 @@ export const ListagemCidades = () => {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell>
-                                    <IconButton onClick={() => handleDelete(cidade.id)} size="small">
+                                    <IconButton onClick={() => handleConfirmDelete(cidade)} size="small">
                                         <Icon>delete</Icon>
                                     </IconButton>
                                     <IconButton onClick={() => navigate(`/cidades/detalhe/${cidade.id}`)} size="small">
@@ -149,6 +151,15 @@ export const ListagemCidades = () => {
                     </TableFooter>
                 </Table>
             </TableContainer>
+
+            <DialogConfirm
+                titleDialog="Excluir cidade"
+                contextTextDialog={`
+                    Deseja realmente excluir a cidade (${selectedItem.nome})? 
+                    Caso queira continuar é só clicar em confirmar.
+                `}
+                handleActionDialog={() => handleDelete(selectedItem.id)}
+            />
 
         </LayoutBasePaginas >
 

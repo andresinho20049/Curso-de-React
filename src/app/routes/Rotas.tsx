@@ -1,4 +1,4 @@
-import { AppDrawerProvider, useContextAuthentication } from "../shared/context"
+import { AppDrawerProvider, DialogConfirmAppProvider, useContextAuthentication } from "../shared/context"
 import { Roteamento } from "./Roteamento";
 import { RoteamentoPrivado } from "./RoteamentoPrivado";
 
@@ -9,8 +9,10 @@ export const Rotas = () => {
         return <Roteamento />
 
     return (
-        <AppDrawerProvider>
-            <RoteamentoPrivado />
-        </AppDrawerProvider>
+        <DialogConfirmAppProvider>
+            <AppDrawerProvider>
+                <RoteamentoPrivado />
+            </AppDrawerProvider>
+        </DialogConfirmAppProvider>
     )
 }

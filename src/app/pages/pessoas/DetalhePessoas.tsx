@@ -1,20 +1,13 @@
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 import { FormHandles } from "@unform/core";
 import { Form } from "@unform/web";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 import { FerramentasDetalhe } from "../../shared/components";
-import { VTextField } from "../../shared/components/forms";
+import { IAutocompleteOptions, VAutocomplete, VTextField } from "../../shared/components/forms";
 import { LayoutBasePaginas } from "../../shared/layout";
-import { PessoasService } from "../../shared/services";
-
-
-interface IFormData {
-    nomeCompleto: string;
-    email: string;
-    cidadeId: number;
-}
+import { CidadesService, IDetalhePessoa, PessoasService } from "../../shared/services";
 
 export const DetalhePessoas = () => {
 
@@ -27,11 +20,23 @@ export const DetalhePessoas = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [nome, setNome] = useState('');
 
-    const formValidSchema: yup.SchemaOf<IFormData> = yup.object().shape({
+    const formValidSchema: yup.SchemaOf<Omit<IDetalhePessoa, 'id'>> = yup.object().shape({
         nomeCompleto: yup.string().required().min(3),
         email: yup.string().required().email(),
         cidadeId: yup.number().required()
     })
+
+    const findAutocompleteCidade = useCallback(async (busca:string):Promise<IAutocompleteOptions[]> => {
+        
+        const result = await CidadesService.getAll(1, 50, busca);
+
+        if(result instanceof Error) return [] as IAutocompleteOptions[];
+
+        return result.data.map((cidade) => (
+            {id: cidade.id, label: cidade.nome}
+        ))
+        
+    }, [])
 
     useEffect(() => {
         console.log(id);
@@ -58,8 +63,9 @@ export const DetalhePessoas = () => {
         }
     }, [id])
 
-    const handleSave = (dados: IFormData) => {
+    const handleSave = (dados: IDetalhePessoa) => {
 
+        console.log(dados)
         formValidSchema
             .validate(dados, { abortEarly: false })
             .then((dadosValid) => {
@@ -183,12 +189,11 @@ export const DetalhePessoas = () => {
                         </Grid>
                         <Grid container item direction='row'>
                             <Grid item xs={12} sm={12} md={6} lg={4} xl={2}>
-                                <VTextField
-                                    fullWidth
-                                    name="cidadeId"
+                                <VAutocomplete
+                                    isExtLoading={isLoading}
                                     label="Cidade"
-                                    type="number"
-                                    disabled={isLoading}
+                                    name="cidadeId"
+                                    findValues={(busca) => findAutocompleteCidade(busca)}
                                 />
                             </Grid>
                         </Grid>

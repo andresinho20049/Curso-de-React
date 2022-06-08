@@ -1,5 +1,6 @@
-import { Icon, IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { ReactNode } from "react";
+import { Icon, IconButton, Typography, useTheme, useMediaQuery } from "@mui/material";
+
 import { BarraFerramentasContainer, ContentContainer, LayoutContainer, TitleContainer } from "../components";
 import { useAppDrawerContext } from "../context";
 

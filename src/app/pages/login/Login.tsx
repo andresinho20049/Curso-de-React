@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { useUsuarioLogged } from "../../shared/hooks";
+import { useNavigate } from "react-router-dom";
+import { useUsuarioLogged } from "../../shared/hooks/UseUsuarioLogged";
 import { ButtonLogin } from "./components/ButtonLogin";
 import { InputLogin } from "./components/inputLogin";
 
@@ -11,31 +11,21 @@ export const Login = () => {
 
     const inputPasswordRef = useRef<HTMLInputElement>(null);
 
-    const { nomeUsuario } = useUsuarioLogged();
+    const { setNome } = useUsuarioLogged();
 
+    const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     console.log(email, password);
-    // }, [email, password]);
 
     const handleEntrar = useCallback(() => {
         console.log(email, password);
 
-        if(inputPasswordRef.current !== null){
-            inputPasswordRef.current.focus();
-            return;
-        }
-
-        Navigate({to: '/'});
+        setNome(email);
+        navigate('/')
     }, [email, password])
 
     return (
         <div>
             <form>
-
-                <p>Quantidade de caracteres no e-mail: {email.length}</p>
-
-                <p>{nomeUsuario}</p>
 
                 <InputLogin 
                     value={email} 
@@ -51,10 +41,6 @@ export const Login = () => {
                     type='password' 
                     ref={inputPasswordRef} 
                 />
-                
-                {/* <button type="button" onClick={handleEntrar}>
-                    Entrar
-                </button> */}
 
                 <ButtonLogin type="button" onClick={handleEntrar} label="Entrar" />
             </form>

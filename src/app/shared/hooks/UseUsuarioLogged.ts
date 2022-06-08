@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { UsuarioLoggedContext } from "../context"
+import { UsuarioLoggedContext } from "../context/UsuarioLogged";
 
 
 export const useUsuarioLogged = () => {

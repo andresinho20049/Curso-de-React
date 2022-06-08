@@ -1,5 +1,5 @@
-import { UsuarioLoggedProvider } from "./shared/context";
 import { Rota } from "./routes"
+import { UsuarioLoggedProvider } from "./shared/context/UsuarioLogged";
 
 export const App = () => {
   return (

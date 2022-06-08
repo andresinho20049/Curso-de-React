@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom"
-import { useUsuarioLogged } from "../../shared/hooks";
+import { useUsuarioLogged } from "../../shared/hooks/UseUsuarioLogged";
 
 export const Dashboard = () => {
     const counterRef = useRef({ counter: 0});
@@ -11,7 +11,7 @@ export const Dashboard = () => {
         <div>
             <p>Dashboard</p>
 
-            <p>{usuarioLoggedContext.nomeUsuario}</p>
+            <p>Usuário logado: {usuarioLoggedContext.nomeUsuario}</p>
 
             <p>{counterRef.current?.counter}</p>
 

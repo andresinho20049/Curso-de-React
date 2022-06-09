@@ -1,44 +1,51 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { useDobounce } from "../../hooks";
 import { useField } from "@unform/core";
-
-
-export interface IAutocompleteOptions {
-    id: number;
-    label: string;
-}
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useDobounce } from "../../hooks";
 
 interface IVAutocompleteProps {
     name: string;
     label: string;
     isExtLoading?: boolean;
-    findValues: (busca: string) => Promise<IAutocompleteOptions[]>
+
+    options: any[];
+    setOptions: (list: any[]) => void
+
+    selected: any | null;
+    setSelected: (item: any | null) => void;
+
+    getLabel: (optItem: any) => string;
+    findValues: (busca: string) => Promise<any[]>;
 }
 
 export const VAutocomplete = ({
     name,
     label,
+
+    selected,
+    setSelected,
+
+    options,
+    setOptions,
+
+    getLabel,
     findValues,
-    isExtLoading = false}: IVAutocompleteProps) => {
+    isExtLoading = false }: IVAutocompleteProps) => {
 
     const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
-
-    const [selectedId, setSelectedId] = useState<number | null>(defaultValue);
 
     const { debounce } = useDobounce();
     const [isLoading, setLoading] = useState(true);
 
-    const [options, setOptions] = useState<IAutocompleteOptions[]>([]);
-    const [busca, setBusca] = useState('');
+    const [busca, setBusca] = useState(getLabel(defaultValue));
 
     useEffect(() => {
         registerField({
             name: fieldName,
-            getValue: () => selectedId,
-            setValue: (_, newValue) => setSelectedId(newValue)
+            getValue: () => selected,
+            setValue: (_, newValue) => setSelected(newValue)
         })
-    }, [registerField, fieldName, selectedId])
+    }, [registerField, fieldName, selected])
 
     useEffect(() => {
         setLoading(true);
@@ -51,12 +58,12 @@ export const VAutocomplete = ({
         })
     }, [busca])
 
-    const autoCompleteSelectedOption = useMemo(() => {
-        if (!selectedId) return null;
+    const checkValue = useCallback((opt: any, value: any) => {
+        if(opt?.id)
+            return opt?.id === value?.id
 
-        const selectedOpt = options.find(opt => opt.id === selectedId);
-        return selectedOpt ?? null;
-    }, [selectedId, options])
+        return opt === value
+    }, [])
 
     return (
         <Autocomplete
@@ -65,12 +72,16 @@ export const VAutocomplete = ({
             noOptionsText="Nenhuma opção"
             loadingText="Carregando..."
             disablePortal
+            value={selected}
             options={options}
             loading={isLoading}
             disabled={isExtLoading}
-            value={autoCompleteSelectedOption}
+            inputValue={defaultValue}
+            filterSelectedOptions={false}
+            isOptionEqualToValue={(opt, value) => checkValue(opt, value)}
+            getOptionLabel={(opt) => getLabel(opt)}
             onInputChange={(_, newValue) => setBusca(newValue)}
-            onChange={(_, newValue) => { setSelectedId(newValue?.id ?? null); setBusca(''); clearError() }}
+            onChange={(_, newValue) => { setSelected(newValue); clearError() }}
             popupIcon={isExtLoading || isLoading ? <CircularProgress size={22} /> : undefined}
             renderInput={(params) => (
                 <TextField

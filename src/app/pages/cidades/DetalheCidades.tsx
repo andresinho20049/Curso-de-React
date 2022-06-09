@@ -1,7 +1,6 @@
 import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 import { Form } from "@unform/web";
-import { DialogConfirm, FerramentasDetalhe } from "../../shared/components";
-import { VTextField } from "../../shared/components/forms";
+import { DialogConfirm, FerramentasDetalhe, VTextField } from "../../shared/components";
 import { LayoutBasePaginas } from "../../shared/layout";
 import { useDetalheCidade } from "../../hooks";
 ;

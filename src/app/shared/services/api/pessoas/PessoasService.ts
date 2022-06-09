@@ -1,16 +1,17 @@
 import { Api } from "../ApiConfig";
+import { ICidadeData } from "../cidades/CidadesService";
 
 export interface IListPessoa {
     id: number;
     email: string;
-    cidadeId: number;
+    cidade: ICidadeData;
     nomeCompleto: string;
 }
 
 export interface IDetalhePessoa {
     id: number;
     email: string;
-    cidadeId: number;
+    cidade: ICidadeData;
     nomeCompleto: string;
 }
 

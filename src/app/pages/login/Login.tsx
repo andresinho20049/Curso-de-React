@@ -1,13 +1,12 @@
-import { Copyright } from "@mui/icons-material";
-import { Avatar, Box, Button, CircularProgress, Container, CssBaseline, Grid, Input, Link, TextField, Tooltip, Typography } from "@mui/material";
+import { Avatar, Box, Button, CircularProgress, Container, CssBaseline, Link, Tooltip, Typography } from "@mui/material";
+import { FormHandles } from "@unform/core";
+import { Form } from "@unform/web";
 import { useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import * as yup from "yup";
+import { VTextField } from "../../shared/components";
 import { useContextAuthentication } from "../../shared/context";
 import { IUsuarioLogin } from "../../shared/services";
-import * as yup from "yup";
-import { Form } from "@unform/web";
-import { FormHandles } from "@unform/core";
-import { VTextField } from "../../shared/components/forms";
 
 export const Login = () => {
 
@@ -16,8 +15,6 @@ export const Login = () => {
         password: yup.string().required()
     })
     const formRef = useRef<FormHandles>(null);
-
-    const inputPasswordRef = useRef<HTMLInputElement>(null);
 
     const { login } = useContextAuthentication();
     const navigate = useNavigate();

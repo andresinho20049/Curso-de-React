@@ -1,135 +1,37 @@
-import { Box, Button, Grid, LinearProgress, Paper, Typography } from "@mui/material";
-import { FormHandles } from "@unform/core";
+import { Box, Grid, LinearProgress, Paper, Typography } from "@mui/material";
 import { Form } from "@unform/web";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import * as yup from "yup";
-import { DialogConfirm, FerramentasDetalhe } from "../../shared/components";
-import { IAutocompleteOptions, VAutocomplete, VTextField } from "../../shared/components/forms";
-import { useDialogConfirmAppContext } from "../../shared/context";
-import { useSnackbarAppContext } from "../../shared/context/SnackbarAppContext";
+import { useDetalhePessoa } from "../../hooks";
+import { DialogConfirm, FerramentasDetalhe, VAutocomplete, VTextField } from "../../shared/components";
 import { LayoutBasePaginas } from "../../shared/layout";
-import { CidadesService, IDetalhePessoa, PessoasService } from "../../shared/services";
 
 export const DetalhePessoas = () => {
 
-    var isSaveAndClose = false;
-    const { id } = useParams<'id'>();
-    const navigate = useNavigate();
+    const {
 
-    const { showMsg } = useSnackbarAppContext();
-    const { handleOpenDialog } = useDialogConfirmAppContext();
+        id,
+        nome,
 
-    const formRef = useRef<FormHandles>(null);
+        isLoading,
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [nome, setNome] = useState('');
+        formRef,
+        saveOnly,
+        saveAndClose,
 
-    const formValidSchema: yup.SchemaOf<Omit<IDetalhePessoa, 'id'>> = yup.object().shape({
-        nomeCompleto: yup.string().required().min(3),
-        email: yup.string().required().email(),
-        cidadeId: yup.number().required()
-    })
+        handleNovo,
+        handleSave,
+        handleVoltar,
+        handleDelete,
 
-    const findAutocompleteCidade = useCallback(async (busca: string): Promise<IAutocompleteOptions[]> => {
+        handleOpenDialog,
 
-        const result = await CidadesService.getAll(1, 5, busca);
+        options,
+        selected,
+        setOptions,
+        setSelected,
+        getOptionLabel,
+        findAutocompleteCidade
 
-        if (result instanceof Error) return [] as IAutocompleteOptions[];
-
-        return result.data.map((cidade) => (
-            { id: cidade.id, label: cidade.nome }
-        ))
-
-    }, [])
-
-    useEffect(() => {
-        if (id !== undefined) {
-            setIsLoading(true);
-            PessoasService.getById(Number(id))
-                .then((result) => {
-                    if (result instanceof Error) {
-                        showMsg(result.message, true);
-                        navigate('/pessoas');
-                    } else {
-                        setNome(result.nomeCompleto);
-
-                        formRef.current?.setData(result);
-                    }
-                    setIsLoading(false);
-                })
-        } else {
-            formRef.current?.setData({
-                nomeCompleto: '',
-                email: '',
-                cidadeId: ''
-            })
-        }
-    }, [id])
-
-    const handleSave = (dados: IDetalhePessoa) => {
-
-        formValidSchema
-            .validate(dados, { abortEarly: false })
-            .then((dadosValid) => {
-
-                setIsLoading(true);
-                if (id === undefined) {
-                    PessoasService.create(dadosValid)
-                        .then((result) => {
-                            if (result instanceof Error) {
-                                showMsg(result.message);
-                            } else {
-                                showMsg("Pessoa cadastrada com sucesso!");
-                                if (isSaveAndClose) {
-                                    navigate('/pessoas')
-                                } else {
-                                    navigate(`/pessoas/detalhe/${result}`)
-                                }
-                            }
-                            setIsLoading(false)
-                        })
-                } else {
-                    PessoasService.update({ id: Number(id), ...dadosValid })
-                        .then((result) => {
-                            if (result instanceof Error) {
-                                showMsg(result.message);
-                            } else {
-                                showMsg("Pessoa atualizada com sucesso!");
-                                if (isSaveAndClose) {
-                                    navigate('/pessoas');
-                                } else {
-                                    setNome(dados.nomeCompleto);
-                                }
-                            }
-                            setIsLoading(false);
-                        })
-                }
-
-            })
-            .catch((errors: yup.ValidationError) => {
-                const validationErrors: { [key: string]: string } = {}
-
-                errors.inner.forEach(error => {
-                    if (!error.path || validationErrors[error.path]) return;
-
-                    validationErrors[error.path] = error.message
-                });
-                formRef.current?.setErrors(validationErrors);
-            })
-    }
-
-    const handleDelete = useCallback((id: number) => {
-        PessoasService.deleteById(Number(id))
-            .then(result => {
-                if (result instanceof Error) {
-                    showMsg(result.message, true)
-                } else {
-                    showMsg('Registro apagado com sucesso!')
-                    navigate('/pessoas')
-                }
-            })
-    }, [])
+    } = useDetalhePessoa();
 
     return (
         <LayoutBasePaginas
@@ -142,11 +44,11 @@ export const DetalhePessoas = () => {
                     isVisibleBtnApagar={id !== undefined}
                     isLoading={isLoading}
 
-                    clickSalvar={() => { isSaveAndClose = false; formRef.current?.submitForm(); }}
+                    clickSalvar={saveOnly}
                     clickApagar={() => handleOpenDialog(Number(id))}
-                    clickSalvarVoltar={() => { isSaveAndClose = true; formRef.current?.submitForm(); }}
-                    clickVoltar={() => navigate('/pessoas')}
-                    clickNovo={() => navigate('/pessoas/detalhe')}
+                    clickSalvarVoltar={saveAndClose}
+                    clickVoltar={handleVoltar}
+                    clickNovo={handleNovo}
                 />}>
 
             <Form ref={formRef} onSubmit={handleSave}>
@@ -190,7 +92,12 @@ export const DetalhePessoas = () => {
                                 <VAutocomplete
                                     isExtLoading={isLoading}
                                     label="Cidade"
-                                    name="cidadeId"
+                                    name="cidade"
+                                    options={options}
+                                    selected={selected}
+                                    setOptions={setOptions}
+                                    setSelected={setSelected}
+                                    getLabel={getOptionLabel}
                                     findValues={(busca) => findAutocompleteCidade(busca)}
                                 />
                             </Grid>

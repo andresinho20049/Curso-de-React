@@ -1,4 +1,4 @@
-import { Button, Icon, Typography } from "@mui/material"
+import { Button, Icon } from "@mui/material";
 
 interface IButtonAppProps {
     variant?: "outlined" | "text" | "contained";
@@ -14,7 +14,7 @@ export const ButtonApp = ({
     onClick,
     iconButton,
     label
-}:IButtonAppProps) => {
+}: IButtonAppProps) => {
     return (
         <Button
             variant={variant}
@@ -23,9 +23,7 @@ export const ButtonApp = ({
             onClick={onClick}
             startIcon={<Icon>{iconButton}</Icon>}>
 
-            <Typography variant="button" whiteSpace="nowrap" textOverflow="ellipsis" overflow="hidden">
-                {label}
-            </Typography>
+            {label}
 
         </Button>
     )

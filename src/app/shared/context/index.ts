@@ -1,4 +1,4 @@
-export * from './ThemeContext'
+export * from './AppThemeContext'
 export * from './DrawerContext'
 export * from './SnackbarAppContext'
 export * from './AuthenticationContext'

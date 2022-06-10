@@ -1,4 +1,4 @@
-import { Icon, ListItemButton, ListItemIcon, ListItemText } from "@mui/material"
+import { Icon, ListItemButton, ListItemIcon, ListItemText, Typography } from "@mui/material"
 import { ReactNode } from "react"
 import { useMatch, useNavigate, useResolvedPath } from "react-router-dom"
 
@@ -24,27 +24,12 @@ export const ButtonItemDrawerApp = ({ to, icone, onClick, children }: IButtonIte
     return (
         <ListItemButton onClick={handleClick} selected={!!match}>
             <ListItemIcon>
-                <Icon>{icone}</Icon>
+                <Icon color="primary" >{icone}</Icon>
             </ListItemIcon>
             <ListItemText>
+                <Typography variant="button">
                 {children}
-            </ListItemText>
-        </ListItemButton>
-    )
-}
-
-interface IToggleButtonDrawerProps {
-    onClick: () => void
-}
-
-export const ToggleButtonDrawer = ({ onClick }: IToggleButtonDrawerProps) => {
-    return (
-        <ListItemButton onClick={onClick}>
-            <ListItemIcon>
-                <Icon>dark_mode</Icon>
-            </ListItemIcon>
-            <ListItemText>
-                Alternar Tema
+                </Typography>
             </ListItemText>
         </ListItemButton>
     )

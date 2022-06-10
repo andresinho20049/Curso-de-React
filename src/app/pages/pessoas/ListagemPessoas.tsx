@@ -1,4 +1,5 @@
 import { Icon, IconButton, LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TablePagination, TableRow } from '@mui/material';
+import { useTheme } from '@mui/system';
 import { useListagemPessoas } from '../../hooks';
 
 
@@ -47,7 +48,7 @@ export const ListagemPessoas = () => {
                     <TableHead>
                         <TableRow>
                             <TableCell width={100}>Ações</TableCell>
-                            <TableCell>Nome Completo</TableCell>
+                            <TableCell color='secundary'>Nome Completo</TableCell>
                             <TableCell>Email</TableCell>
                         </TableRow>
                     </TableHead>
@@ -59,10 +60,10 @@ export const ListagemPessoas = () => {
                             >
                                 <TableCell>
                                     <IconButton onClick={() => handleConfirmDelete({ id: pessoa.id, nome: pessoa.nomeCompleto })} size="small">
-                                        <Icon>delete</Icon>
+                                        <Icon color='error'>delete</Icon>
                                     </IconButton>
                                     <IconButton onClick={() => handleUpdate(pessoa.id)} size="small">
-                                        <Icon>edit</Icon>
+                                        <Icon color='info'>edit</Icon>
                                     </IconButton>
                                 </TableCell>
                                 <TableCell>{pessoa.nomeCompleto}</TableCell>

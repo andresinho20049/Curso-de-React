@@ -1,38 +1,32 @@
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { useField } from "@unform/core";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDobounce } from "../../hooks";
 
-interface IVAutocompleteProps {
+type IVAutocompleteProps<T> = {
     name: string;
     label: string;
     isExtLoading?: boolean;
 
-    options: any[];
-    setOptions: (list: any[]) => void
-
-    selected: any | null;
-    setSelected: (item: any | null) => void;
-
-    getLabel: (optItem: any) => string;
-    findValues: (busca: string) => Promise<any[]>;
+    getLabel: (optItem: T) => string;
+    findValues: (busca: string) => Promise<T[]>;
 }
 
-export const VAutocomplete = ({
+export const VAutocomplete = <T extends {id?: number}>({
     name,
     label,
 
-    selected,
-    setSelected,
-
-    options,
-    setOptions,
-
     getLabel,
     findValues,
-    isExtLoading = false }: IVAutocompleteProps) => {
+
+    isExtLoading = false 
+
+}: IVAutocompleteProps<T>) => {
 
     const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
+
+    const [options, setOptions] = useState<T[]>([]);
+    const [selected, setSelected] = useState<T | null>(null);
 
     const { debounce } = useDobounce();
     const [isLoading, setLoading] = useState(true);
@@ -58,7 +52,8 @@ export const VAutocomplete = ({
         })
     }, [busca])
 
-    const checkValue = useCallback((opt: any, value: any) => {
+    const checkValue = useCallback((opt: T, value: T) => {
+        
         if(opt?.id)
             return opt?.id === value?.id
 

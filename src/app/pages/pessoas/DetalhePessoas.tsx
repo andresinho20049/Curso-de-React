@@ -24,10 +24,6 @@ export const DetalhePessoas = () => {
 
         handleOpenDialog,
 
-        options,
-        selected,
-        setOptions,
-        setSelected,
         getOptionLabel,
         findAutocompleteCidade
 
@@ -93,10 +89,6 @@ export const DetalhePessoas = () => {
                                     isExtLoading={isLoading}
                                     label="Cidade"
                                     name="cidade"
-                                    options={options}
-                                    selected={selected}
-                                    setOptions={setOptions}
-                                    setSelected={setSelected}
                                     getLabel={getOptionLabel}
                                     findValues={(busca) => findAutocompleteCidade(busca)}
                                 />

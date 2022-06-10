@@ -10,7 +10,7 @@ import { IUsuarioLogin } from "../../shared/services";
 
 export const Login = () => {
 
-    const formValidSchema: yup.SchemaOf<IUsuarioLogin> = yup.object().shape({
+    const formValidSchema: yup.SchemaOf<Omit<IUsuarioLogin, 'id'>> = yup.object().shape({
         username: yup.string().required().email(),
         password: yup.string().required()
     })
@@ -21,7 +21,7 @@ export const Login = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleEntrar = useCallback((dados: IUsuarioLogin) => {
+    const handleEntrar = useCallback((dados: Omit<IUsuarioLogin, 'id'>) => {
         setIsLoading(true);
 
         formValidSchema

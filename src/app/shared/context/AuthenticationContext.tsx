@@ -1,10 +1,10 @@
 import { createContext, ReactNode, useCallback, useContext, useMemo } from "react";
-import { useStorage } from "../hooks";
+import usePersistedState from "../hooks/UsePersistedState";
 import { IUsuarioLogin, UsuarioService } from "../services";
 
 interface IAuthenticationData {
     isAuthenticated: boolean;
-    login: (login: IUsuarioLogin) => Promise<string | void>;
+    login: (login: Omit<IUsuarioLogin, 'id'>) => Promise<string | void>;
     logout: () => void;
 
 }
@@ -20,9 +20,9 @@ interface IAuthenticationProviderProps {
 }
 
 export const AuthenticationProvider = ({ children} : IAuthenticationProviderProps) => {
-    const [token, setToken] = useStorage(null);
+    const [token, setToken] = usePersistedState<string | null>('auth', null);
 
-    const handleLogin = useCallback(async (login: IUsuarioLogin) => {
+    const handleLogin = useCallback(async (login: Omit<IUsuarioLogin, 'id'>) => {
         
         const isValid = await UsuarioService.auth(login);
         if(isValid)

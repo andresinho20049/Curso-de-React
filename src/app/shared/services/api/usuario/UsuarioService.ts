@@ -3,6 +3,7 @@ import { Api } from "../ApiConfig";
 const bcrypt = require('bcryptjs');
 
 export interface IUsuarioLogin {
+    id: number;
     username: string,
     password: string
 }
@@ -15,7 +16,7 @@ const encryptPassword = (password: string) => {
     return hash;
 }
 
-const auth = async (login: IUsuarioLogin): Promise<Boolean> => {
+const auth = async (login: Omit<IUsuarioLogin, 'id'>): Promise<Boolean> => {
     
     const result = await getByUsername(login.username);
 
@@ -60,7 +61,7 @@ const getByUsername = async (username: string): Promise<IUsuarioLogin[] | Error>
     }
 };
 
-const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | Error> => {
+const create = async (dataToCreate: Omit<IUsuarioLogin, 'id'>): Promise<IUsuarioLogin | Error> => {
 
     try {
         const password = await encryptPassword(dataToCreate.password);
@@ -74,12 +75,12 @@ const create = async (dataToCreate: IUsuarioLogin): Promise<IUsuarioLogin | Erro
     }
 };
 
-const update = async (id: number, dataToUpdate: IUsuarioLogin): Promise<IUsuarioLogin | Error> => {
+const update = async (dataToUpdate: IUsuarioLogin): Promise<IUsuarioLogin | Error> => {
 
     try {
         dataToUpdate.password = encryptPassword(dataToUpdate.password);
 
-        const { data } = await Api.put<IUsuarioLogin>(`/usuarios/${id}`, dataToUpdate);
+        const { data } = await Api.put<IUsuarioLogin>(`/usuarios/${dataToUpdate.id}`, dataToUpdate);
 
         return data;
     } catch (error: any) {

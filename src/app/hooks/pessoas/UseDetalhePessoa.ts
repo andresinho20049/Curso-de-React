@@ -21,11 +21,7 @@ export const useDetalhePessoa = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-
-    const [selected, setSelected] = useState<ICidadeData | null>(null);
-    const [options, setOptions] = useState<ICidadeData[]>([]);
-
-    const getOptionLabel = useCallback((cidade: ICidadeData | null) => {
+    const getOptionLabel = useCallback((cidade: ICidadeData) => {
         return cidade?.nome || '';
     }, [])
 
@@ -93,8 +89,6 @@ export const useDetalhePessoa = () => {
     }, [])
 
     const handleSave = useCallback((dados: IDetalhePessoa) => {
-
-        console.log(dados)
 
         formValidSchema
             .validate(dados, { abortEarly: false })
@@ -176,10 +170,6 @@ export const useDetalhePessoa = () => {
 
         handleOpenDialog,
 
-        options,
-        selected,
-        setOptions,
-        setSelected,
         getOptionLabel,
         findAutocompleteCidade
 

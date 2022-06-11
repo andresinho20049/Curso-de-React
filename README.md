@@ -45,6 +45,54 @@ json-server -w ./mock/db.json -p 4000
 *Usuário*: admin@admin.com  
 *Senha*: 1234
 
+## Custom Theme
+Após finalizado o curso, adicionei algumas features ao site, e uma delas foi a implementação de um custom Theme.
+### Como foi desenvolvido?
+ - ModalCustomThemeContext:
+   - ModalCustomThemeContext é um context que engloba todo o component de Dialog utilizado para customizar o tema
+   - O ModalCustomThemeContext tem um State com typagem ThemeOptions
+   - No AppThemeContext(Context principal que engloba todo o App), tem um PersistentState(State que armazena no localStorage)    
+   Esse persistentState guarda o Custom Theme e caso não exista ele cria um novo ThemeOptions.
+   - Então no ModalCustomThemeContext é criado um novo state com os valores do custom theme do AppContext como dados iniciais, assim quando o usuário entrar no modal, os atributos do tema, terão os valores salvos anteriormente por ele.
+   - No ModalCustomThemeContext é criado o customThemeProps e setCustomThemeProps sobre dados do custom theme ou sobre o tema atual. Assim:
+   ```ts
+   const { customTheme, setCustomTheme, setThemeName } = useAppThemeContext();
+
+    const atualTheme = useTheme();
+    const [customThemeProps, setCustomThemeProps] = useState<ThemeOptions>(customTheme || atualTheme as ThemeOptions);
+   ```
+   - O ModalCustomThemeContext recebe os métodos setCustomTheme e setThemeName, pois quando o usuário confirma edição do custom theme, é executado dentro desse contexto um callback que atualiza o persistentState e troca o tema atual para o custom theme.
+   - Dentro desse mesmo contexto, tem um useMemo que executa sempre que o customThemeProps é atualizado
+   ```ts
+   const theme = useMemo(() => {
+        return createTheme(customThemeProps);
+
+    }, [customThemeProps])
+   ```
+   - Esse theme gerado após execução do useMemo é utilizado para atualizar o tema da preview dentro do Dialog.
+   - O provider desse contexto retorna:
+      - theme: Tema para atuliazar preview
+      - customThemeProps: utilzado no form para editar tema
+      - setCustomThemeProps: Executado no onChange do Form
+      - applyTheme: Executado no Submit do Form
+- ModalCustomTheme:
+   - O ModalCustomTheme é o Dialog/Modal filho do contexto explicado acima
+   ```json
+   {
+      "ModalCustomThemeContext":{
+         "ModalCustomTheme": {
+            "SettingCustom": {},
+            "ThemeProvider": {
+               "PreviewCustom":{}
+            }
+         }
+      }
+   }
+   ```
+   - Acima tento ilustra como seria a estrutura do ModalCustomTheme, o importante a ser frizado nessa representação é a hierarquia Pai/Filho.
+   - Com o contexto englobando todo o Dialog, é possivel dentro de todo o component pegar dados/manipular, e assim executar ações do contexto. E com o Preview sendo filho do ThemeProvider é possivel receber o theme gerado pelo useMemo do ModalCustomThemeContext e aplicar esse tema ao preview.
+
+
 ## Bibliotecas utilizadas
 Irei abordar um pouco sobre as ferramentas/bibliotecas utilizadas, o porque foram desenvolvidas de tal maneiras, principalmente os pontos que foram desenvolvidos diferente da abordagem utilizada no curso.
 ### Material UI 5 

@@ -7,13 +7,13 @@ type TvTextFieldProps = TextFieldProps & {
     name: string;
 }
 
-export const VTextField = ({name, ...rest} : TvTextFieldProps) => {
+export const VTextField = ({ name, ...rest }: TvTextFieldProps) => {
 
-    const { 
-        fieldName, 
-        registerField, 
-        defaultValue, 
-        error, 
+    const {
+        fieldName,
+        registerField,
+        defaultValue,
+        error,
         clearError } = useField(name);
 
     const [value, setValue] = useState(defaultValue || '');
@@ -27,7 +27,7 @@ export const VTextField = ({name, ...rest} : TvTextFieldProps) => {
     }, [registerField, fieldName, value])
 
     return (
-         <TextField 
+        <TextField
             {...rest}
             error={!!error}
             helperText={error}
@@ -38,6 +38,6 @@ export const VTextField = ({name, ...rest} : TvTextFieldProps) => {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={() => error ? clearError() : undefined}
-         />
+        />
     )
 }

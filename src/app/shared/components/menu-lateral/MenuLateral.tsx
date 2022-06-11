@@ -1,8 +1,8 @@
 import { Avatar, Box, Divider, Drawer, List, useMediaQuery, useTheme } from "@mui/material";
 import { ReactNode } from "react";
 import { ModalCustomTheme } from "../../../modal";
-import { useAppDrawerContext, useContextAuthentication } from "../../context";
-import { IAppThemeProps, useCustomTheme } from "../../hooks";
+import { ModalCustomThemeProvider, useAppDrawerContext, useContextAuthentication } from "../../context";
+import { useCustomTheme } from "../../hooks";
 import { ButtonItemDrawerApp } from "./ButtonItemDrawerApp";
 import { IMenuOptionProps, MenuExpansivoApp } from "./MenuExpansivoApp";
 
@@ -20,24 +20,23 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
     const {
         themeName,
 
-        propsCustomTheme,
         existsCustomTheme,
 
         selectDarkTheme,
         selectLightTheme,
         selectCustomTheme,
-        
+
         isOpenCustomTheme,
         openDialogCustomTheme,
         onCloseDialogCustomTheme,
 
     } = useCustomTheme();
 
-    const optionsMenuTheme:IMenuOptionProps[] = [
-        {text: "dark", onClick: () => selectDarkTheme()},
-        {text: "light", onClick: () => selectLightTheme()},
-        {text: "custom", onClick: () => selectCustomTheme(), dividerAfter: true, disabled: !existsCustomTheme},
-        {text: "Config Custom", onClick: () => openDialogCustomTheme()},
+    const optionsMenuTheme: IMenuOptionProps[] = [
+        { text: "dark", onClick: () => selectDarkTheme() },
+        { text: "light", onClick: () => selectLightTheme() },
+        { text: "custom", onClick: () => selectCustomTheme(), dividerAfter: true, disabled: !existsCustomTheme },
+        { text: "Config Custom", onClick: () => openDialogCustomTheme() },
     ]
 
     return (
@@ -64,14 +63,14 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
                     </Box>
                     <Box>
 
-                        <MenuExpansivoApp 
+                        <MenuExpansivoApp
                             iconMenu="dark_mode"
                             textMenu="Alterar tema"
                             selected={themeName}
                             options={optionsMenuTheme}
                         />
 
-                        <ButtonItemDrawerApp  to="/login" icone="logout" onClick={logout}>
+                        <ButtonItemDrawerApp to="/login" icone="logout" onClick={logout}>
                             Logout
                         </ButtonItemDrawerApp>
                     </Box>
@@ -82,11 +81,12 @@ export const MenuLateral = ({ children }: IMenuLateralProps) => {
                 {children}
             </Box>
 
-            <ModalCustomTheme 
-                open={isOpenCustomTheme}
-                initialValue={propsCustomTheme}
-                onClose={(themeProps?: IAppThemeProps) => onCloseDialogCustomTheme(themeProps)}
-            />
+            <ModalCustomThemeProvider>
+                <ModalCustomTheme
+                    open={isOpenCustomTheme}
+                    onClose={onCloseDialogCustomTheme}
+                />
+            </ModalCustomThemeProvider>
         </>
     );
 };

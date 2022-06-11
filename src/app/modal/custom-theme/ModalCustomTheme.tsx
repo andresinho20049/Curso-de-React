@@ -1,37 +1,34 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { blue, red } from "@mui/material/colors";
-import { minWidth } from "@mui/system";
-import { useModalCustomTheme } from "../../hooks";
-import { IAppThemeProps } from "../../shared/hooks";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Paper, Stack, ThemeProvider, useMediaQuery, useTheme } from "@mui/material";
+import { FormHandles } from "@unform/core";
+import { useRef } from "react";
+import { useModalCustomThemeContext } from '../../shared/context';
+import { PreviewCustom } from "./PreviewCustom";
 import { SettingCustom } from "./SettingsCustom";
 
 
 interface ICustomThemeProps {
     open: boolean
-    initialValue: IAppThemeProps;
-    onClose: (themeProps?: IAppThemeProps) => void;
+    onClose: () => void;
 }
 
 export const ModalCustomTheme = ({
     open,
-    onClose,
-    initialValue
+    onClose
 }: ICustomThemeProps) => {
 
     const atualTheme = useTheme();
     const smDown = useMediaQuery(atualTheme.breakpoints.down('sm'));
 
-    const {
-        customTheme,
-        customThemeProps
-    } = useModalCustomTheme(initialValue);
+    const formRef = useRef<FormHandles>(null);
+    const { theme } = useModalCustomThemeContext();
 
     const handleCancel = () => {
         onClose();
     };
 
     const handleOk = () => {
-        onClose(customThemeProps);
+        formRef.current?.submitForm();
+        onClose();
     };
 
     return (
@@ -45,13 +42,13 @@ export const ModalCustomTheme = ({
 
             <DialogTitle>Customizar Tema</DialogTitle>
 
-            <DialogContent dividers sx={{height: 500}}>
+            <DialogContent dividers sx={{ height: 500 }}>
                 <Stack
-                    justifyContent="space-between"
-                    alignItems="stretch"
                     spacing={2}
-                    direction={{ xs: "column-reverse", sm: "row" }}
                     height={'100%'}
+                    alignItems="stretch"
+                    justifyContent="space-between"
+                    direction={{ xs: "column-reverse", sm: "row" }}
                 >
                     <Box
                         flex={1}
@@ -59,7 +56,7 @@ export const ModalCustomTheme = ({
                         overflow={'auto'}
                         component={Paper}
                     >
-                        <SettingCustom />
+                        <SettingCustom formRef={formRef}/>
                     </Box>
 
                     <Box
@@ -67,8 +64,11 @@ export const ModalCustomTheme = ({
                         padding={2}
                         overflow={'auto'}
                         component={Paper}
+                        variant={'outlined'}
                     >
-
+                        <ThemeProvider theme={theme}>
+                            <PreviewCustom />
+                        </ThemeProvider>
                     </Box>
                 </Stack>
             </DialogContent>

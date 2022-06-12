@@ -92,6 +92,8 @@ Após finalizado o curso, adicionei algumas features ao site, e uma delas foi a 
    - Acima tento ilustra como seria a estrutura do ModalCustomTheme, o importante a ser frizado nessa representação é a hierarquia Pai/Filho.
    - Com o contexto englobando todo o Dialog, é possivel dentro de todo o component pegar dados/manipular, e assim executar ações do contexto. E com o Preview sendo filho do ThemeProvider é possivel receber o theme gerado pelo useMemo do ModalCustomThemeContext e aplicar esse tema ao preview.
 
+### Preview
+![Demo](https://github.com/andresinho20049/Curso-de-React/blob/master/public/demo/custom-theme-initial.gif?raw=true)
 
 ## Bibliotecas utilizadas
 Irei abordar um pouco sobre as ferramentas/bibliotecas utilizadas, o porque foram desenvolvidas de tal maneiras, principalmente os pontos que foram desenvolvidos diferente da abordagem utilizada no curso.

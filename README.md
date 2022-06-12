@@ -20,7 +20,7 @@ Este projeto foi desenvolvido acompanhando as playlists de cursos do canal [Luca
 ## Como iniciar o projeto
 1. Baixe o projeto, executando um git clone
 ```git
-git clone https://github.com/andresinho20049/Biblioteca_PHP_Parent.git
+git clone https://github.com/andresinho20049/Curso-de-React.git
 ```
 
 2. Dentro da pasta do projeto digite:

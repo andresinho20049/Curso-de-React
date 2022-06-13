@@ -90,7 +90,7 @@ export const SettingCustom = ({
                                     <Grid item xs={12}>
                                         <Grid container>
                                             {palette.listElement.map((attr => (
-                                                <Grid item xs={palette.listElement.length > 1 ? 6 : 12}>
+                                                <Grid key={attr.path} item xs={palette.listElement.length > 1 ? 6 : 12}>
                                                     <VTextField name={attr.path} fullWidth label={attr.label} type='color' />
                                                 </Grid>
                                             )))}

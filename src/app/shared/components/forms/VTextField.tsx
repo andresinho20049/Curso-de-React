@@ -3,11 +3,11 @@ import { useField } from "@unform/core";
 import { useEffect, useState } from "react";
 
 
-type TvTextFieldProps = TextFieldProps & {
+type IVTextFieldProps = TextFieldProps & {
     name: string;
 }
 
-export const VTextField = ({ name, ...rest }: TvTextFieldProps) => {
+export const VTextField = ({ name, ...rest }: IVTextFieldProps) => {
 
     const {
         fieldName,
